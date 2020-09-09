@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 158495602}
   - component: {fileID: 158495601}
   - component: {fileID: 158495604}
+  - component: {fileID: 158495605}
   m_Layer: 0
   m_Name: Graph Modes
   m_TagString: Untagged
@@ -191,6 +192,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b99671990995e439295e540f6bdb62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &158495605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158495600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf34add728c1b84993d448aaf0e54a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  edge: {fileID: 4303653036277783067, guid: cc901540ffeeffd4dae1e3b3bed939f2, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

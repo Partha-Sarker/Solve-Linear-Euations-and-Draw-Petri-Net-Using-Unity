@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class State : Node
+public class Transition : Node
 {
     
 }

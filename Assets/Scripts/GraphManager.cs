@@ -5,7 +5,6 @@ public class GraphManager : MonoBehaviour
     public GameObject graphModes;
     public IGraphMode currentMode;
 
-
     // Start is called before the first frame update
     void Start()
     {
