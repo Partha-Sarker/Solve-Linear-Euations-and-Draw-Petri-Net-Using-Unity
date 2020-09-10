@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DeleteMode : MonoBehaviour, IGraphMode
 {
+    public GraphManager graphManager;
+
     public void OnClick()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -11,7 +13,13 @@ public class DeleteMode : MonoBehaviour, IGraphMode
 
         if (hit.collider != null)
         {
-            Destroy(hit.transform.gameObject);
+            string tag = hit.transform.tag;
+            Debug.Log(tag + " is clicked");
+            if (tag == "State" || tag == "Transition")
+                graphManager.RemoveNode(hit.transform.GetComponent<Node>());
+            else if (tag == "Edge")
+                graphManager.RemoveEdge(hit.transform.GetComponent<Edge>());
+
         }
     }
 }
