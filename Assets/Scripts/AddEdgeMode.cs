@@ -27,7 +27,10 @@ public class AddEdgeMode : MonoBehaviour, IGraphMode
                 Debug.Log("Waiting for next node to create edge");
             }
             else if (prevNode != null && prevNode != currentNode)
-                CreateEdge(prevNode, currentNode);
+            {
+                if(!(prevNode.CompareTag("Transition") && currentNode.CompareTag("Transition")))
+                    CreateEdge(prevNode, currentNode);
+            }
 
             prevNode = currentNode;
         }
