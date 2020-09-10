@@ -26,6 +26,7 @@ public class GraphManager : MonoBehaviour
     public void AddNode(Node node)
     {
         nodes.Add(node);
+        Refresh();
     }
 
     public void RemoveNode(Node node)
@@ -41,6 +42,7 @@ public class GraphManager : MonoBehaviour
 
         nodes.Remove(node);
         node.DestroySelf();
+        Refresh();
     }
 
     public void AddEdge(Edge edge)
@@ -50,12 +52,42 @@ public class GraphManager : MonoBehaviour
         if (reverseEdge != null)
             RemoveEdge(reverseEdge);
         edges.Add(edge);
+        Refresh();
     }
 
     public void RemoveEdge(Edge edge)
     {
         edges.Remove(edge);
         edge.DestroySelf();
+        Refresh();
+    }
+
+    public void Refresh()
+    {
+        int stateCount = 0, transitionCount = 0;
+        foreach(Node node in nodes)
+        {
+            GameObject nodeGameObject = node.gameObject;
+            string tag = nodeGameObject.tag;
+            string title;
+            if (tag == "State")
+            {
+                stateCount++;
+                title = "S" + stateCount;
+            }
+            else
+            {
+                transitionCount++;
+                title = "T" + transitionCount;
+            }
+            nodeGameObject.name = title;
+            node.SetTitleText(title);
+        }
+        for(int i = 0; i < edges.Count; i++)
+        {
+            string title = "Edge" + i;
+            edges[i].gameObject.name = title;
+        }
     }
 
     public Edge GetEdge(Node toNode, Node fromNode)

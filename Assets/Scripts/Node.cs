@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Node : MonoBehaviour
 {
-    //public List<Edge> incomingEdges, outgoingEdges;
+    public TextMeshProUGUI titleText;
 
     public void DestroySelf()
     {
         Destroy(gameObject);
+    }
+
+    public void SetTitleText(string text)
+    {
+        titleText.text = text;
     }
 }
