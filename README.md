@@ -4,3 +4,4 @@
 - Press t and click to create transition.
 - Press e and click 2 states to create an edge between them.
 - Press d and click any node or edge to delete them.
+- Press ctrl + e and click to edit weight or token value.

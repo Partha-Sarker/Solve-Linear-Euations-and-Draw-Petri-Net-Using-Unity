@@ -14,7 +14,6 @@ public class DeleteMode : MonoBehaviour, IGraphMode
         if (hit.collider != null)
         {
             string tag = hit.transform.tag;
-            Debug.Log(tag + " is clicked");
             if (tag == "State" || tag == "Transition")
                 graphManager.RemoveNode(hit.transform.GetComponent<Node>());
             else if (tag == "Edge")

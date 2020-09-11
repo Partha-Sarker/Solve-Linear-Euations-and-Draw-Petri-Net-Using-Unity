@@ -1,18 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using TMPro;
+using System;
 
-public class Edge : MonoBehaviour
+public class Edge : MonoBehaviour, IEditable
 {
     //[HideInInspector]
     public Node fromNode, toNode;
     public int weight = 0;
     public LineRenderer line;
     public BoxCollider2D col;
+    public TMP_InputField inputField;
+    public TextMeshProUGUI weightText;
+    public RectTransform inputCanvas;
 
     public void DestroySelf()
     {
         Destroy(gameObject);
+    }
+
+    public void OnEndEdit()
+    {
+        FindObjectOfType<KeyboardShortcutManager>().EnableShortcut = true;
+        inputField.gameObject.SetActive(false);
+        string text = inputField.text;
+        if (text == "")
+            text = "0";
+        weightText.text = text;
+        weight = Int32.Parse(text);
+    }
+
+    public void ActivateEditmode()
+    {
+        FindObjectOfType<KeyboardShortcutManager>().EnableShortcut = false;
+        inputField.gameObject.SetActive(true);
+        inputField.ActivateInputField();
+        inputField.text = weightText.text;
+        weightText.text = "";
     }
 
     public void Init()
@@ -34,5 +57,7 @@ public class Edge : MonoBehaviour
         Vector2 diff = endPos - startPos;
         float angle = Mathf.Atan2(diff.y, diff.x);
         transform.eulerAngles = new Vector3(0, 0, angle) * Mathf.Rad2Deg;
+
+        inputCanvas.rotation = Quaternion.identity;
     }
 }
