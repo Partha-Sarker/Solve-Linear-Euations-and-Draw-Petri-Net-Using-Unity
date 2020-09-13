@@ -35,7 +35,7 @@ public class KeyboardShortcutManager : MonoBehaviour
             Debug.Log("Add transition mode activated");
             graphManager.currentMode = graphModes.GetComponent<AddTransitionMode>();
         }
-        else if (Input.GetKeyDown(KeyCode.D) && !ctrlDown)
+        else if (Input.GetKeyDown(KeyCode.D) && ctrlDown)
         {
             Debug.Log("Delete mode activated");
             graphManager.currentMode = graphModes.GetComponent<DeleteMode>();
@@ -51,6 +51,16 @@ public class KeyboardShortcutManager : MonoBehaviour
         {
             Debug.Log("Edit mode activated");
             graphManager.currentMode = graphModes.GetComponent<InputMode>();
+        }
+        else if(Input.GetKeyDown(KeyCode.F) && ctrlDown)
+        {
+            Debug.Log("Firing mode activate");
+            graphManager.currentMode = graphModes.GetComponent<FiringMode>();
+        }
+        else if(Input.GetKeyDown(KeyCode.R) && ctrlDown)
+        {
+            Debug.Log("Resetting states");
+            graphManager.ResetStates();
         }
     }
 }

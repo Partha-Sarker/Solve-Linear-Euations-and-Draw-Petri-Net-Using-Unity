@@ -6,7 +6,7 @@ public class Edge : MonoBehaviour, IEditable
 {
     //[HideInInspector]
     public Node fromNode, toNode;
-    public int weight = 0;
+    public int weight = 1;
     public LineRenderer line;
     public BoxCollider2D col;
     public TMP_InputField inputField;
@@ -23,10 +23,10 @@ public class Edge : MonoBehaviour, IEditable
         FindObjectOfType<KeyboardShortcutManager>().EnableShortcut = true;
         inputField.gameObject.SetActive(false);
         string text = inputField.text;
-        if (text == "")
-            text = "0";
-        weightText.text = text;
+        if (text == "" || text == "0")
+            text = "1";
         weight = Int32.Parse(text);
+        weightText.text = text;
     }
 
     public void ActivateEditmode()
@@ -36,6 +36,11 @@ public class Edge : MonoBehaviour, IEditable
         inputField.ActivateInputField();
         inputField.text = weightText.text;
         weightText.text = "";
+    }
+
+    public void SetWeightText()
+    {
+        weightText.text = weight.ToString();
     }
 
     public void Init()

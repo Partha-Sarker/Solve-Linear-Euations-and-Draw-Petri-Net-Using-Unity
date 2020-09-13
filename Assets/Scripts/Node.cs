@@ -6,6 +6,7 @@ using TMPro;
 public class Node : MonoBehaviour
 {
     public TextMeshProUGUI titleText;
+    public int position;
 
     public void DestroySelf()
     {

@@ -7,6 +7,8 @@ public class GraphManager : MonoBehaviour
     public IGraphMode currentMode;
     public List<Node> nodes = new List<Node>();
     public List<Edge> edges = new List<Edge>();
+    private List<int> initialStates;
+    public int stateCount = 0, transitionCount = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -62,9 +64,121 @@ public class GraphManager : MonoBehaviour
         Refresh();
     }
 
+
+    public void FirePetriNetTransition(Transition transition)
+    {
+        Debug.Log("Firing " + transition.transform.name);
+
+        int[] m = new int[stateCount];
+        int[] star_t = new int[stateCount];
+        int[] t_star = new int[stateCount];
+
+        GetValuesForSimulation(transition, ref m, ref star_t, ref t_star);
+        if (initialStates == null)
+            initialStates = new List<int>(m);
+
+        string mString = string.Join(", ", m);
+        string star_tString = string.Join(", ", star_t);
+        string t_starString = string.Join(", ", t_star);
+
+        Debug.Log($"m: {mString}, *t: {star_tString}, t*: {t_starString}");
+
+        if (TestStateMovingCondition(star_t, m) == false)
+        {
+            Debug.LogError("Can't fire " + transition.transform.name);
+            return;
+        }
+
+        int[] m_prime = GetNewStates(m, star_t, t_star);
+        string m_primeString = string.Join(", ", m_prime);
+        Debug.Log($"New state: {m_primeString}");
+
+        SetNewStates(m_prime);
+    }
+
+    private void GetValuesForSimulation(Transition transition, ref int[] m, ref int[] star_t, ref int[] t_star)
+    {
+        int count = 0;
+
+        foreach (Node node in nodes)
+        {
+            string tag = node.tag;
+            if (tag == "State")
+            {
+                State state = (State)node;
+                m[count++] = state.tokenCount;
+            }
+        }
+
+        foreach (Edge edge in edges)
+        {
+            if (edge.toNode == transition)
+            {
+                Node fromNode = edge.fromNode;
+                star_t[fromNode.position - 1] = edge.weight;
+            }
+            else if (edge.fromNode == transition)
+            {
+                Node toNode = edge.toNode;
+                t_star[toNode.position - 1] = edge.weight;
+            }
+        }
+    }
+
+    private bool TestStateMovingCondition(int[] star_t, int[] m)
+    {
+        for(int i=0; i<stateCount; i++)
+        {
+            if (star_t[i] > m[i])
+                return false;
+        }
+        return true;
+    }
+
+    private int[] GetNewStates(int[] m, int[] star_t, int[] t_star)
+    {
+        int[] m_prime = new int[stateCount];
+        for(int i=0; i<stateCount; i++)
+        {
+            m_prime[i] = m[i] - star_t[i] + t_star[i];
+        }
+        return m_prime;
+    }
+
+    private void SetNewStates(int[] m_prime)
+    {
+        foreach(Node node in nodes)
+        {
+            if (node.CompareTag("State"))
+            {
+                State state = (State)node;
+                state.tokenCount = m_prime[state.position - 1];
+            }
+        }
+        Refresh();
+    }
+
+
+    public void ResetStates()
+    {
+        if(initialStates == null)
+        {
+            Debug.Log("Nothing to reset");
+        }
+        if(stateCount == initialStates.Count)
+        {
+            SetNewStates(initialStates.ToArray());
+            Debug.Log("States has been reset");
+        }
+        else
+        {
+            Debug.LogError("State number mismatch");
+        }
+    }
+
     public void Refresh()
     {
-        int stateCount = 0, transitionCount = 0;
+        stateCount = 0; transitionCount = 0;
         foreach(Node node in nodes)
         {
             GameObject nodeGameObject = node.gameObject;
@@ -74,19 +188,25 @@ public class GraphManager : MonoBehaviour
             {
                 stateCount++;
                 title = "S" + stateCount;
+                State state = (State)node;
+                state.SetTokenText();
+                node.position = stateCount;
             }
             else
             {
                 transitionCount++;
                 title = "T" + transitionCount;
+                node.position = transitionCount;
             }
             nodeGameObject.name = title;
             node.SetTitleText(title);
         }
         for(int i = 0; i < edges.Count; i++)
         {
-            string title = "Edge" + i;
+            int count = i + 1;
+            string title = "Edge" + count;
             edges[i].gameObject.name = title;
+            edges[i].SetWeightText();
         }
     }
 

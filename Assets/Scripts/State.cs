@@ -18,8 +18,13 @@ public class State : Node, IEditable
         string text = inputField.text;
         if (text == "")
             text = "0";
-        tokenCountText.text = text;
         tokenCount = Int32.Parse(text);
+        tokenCountText.text = text;
+    }
+
+    public void SetTokenText()
+    {
+        tokenCountText.text = tokenCount.ToString();
     }
 
     public void ActivateEditmode()

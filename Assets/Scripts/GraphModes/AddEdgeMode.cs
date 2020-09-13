@@ -28,7 +28,7 @@ public class AddEdgeMode : MonoBehaviour, IGraphMode
             }
             else if (prevNode != null && prevNode != currentNode)
             {
-                if(!(prevNode.CompareTag("Transition") && currentNode.CompareTag("Transition")))
+                if(!prevNode.CompareTag(currentNode.tag))
                     CreateEdge(prevNode, currentNode);
             }
 
@@ -45,8 +45,6 @@ public class AddEdgeMode : MonoBehaviour, IGraphMode
         edge.toNode = toNode;
         edge.fromNode = fromNode;
 
-        //fromNode.outgoingEdges.Add(edge);
-        //toNode.incomingEdges.Add(edge);
         edge.Init();
 
         graphManager.AddEdge(edge);
