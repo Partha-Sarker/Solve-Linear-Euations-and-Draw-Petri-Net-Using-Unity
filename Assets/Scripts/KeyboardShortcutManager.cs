@@ -62,5 +62,10 @@ public class KeyboardShortcutManager : MonoBehaviour
             Debug.Log("Resetting states");
             graphManager.ResetStates();
         }
+        else if(Input.GetKeyDown(KeyCode.Space) && !ctrlDown)
+        {
+            Debug.Log("Simulating whole petri net");
+            graphManager.SimulateAll();
+        }
     }
 }

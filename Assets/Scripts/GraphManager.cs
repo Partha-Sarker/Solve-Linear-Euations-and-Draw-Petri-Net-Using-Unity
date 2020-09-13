@@ -7,7 +7,7 @@ public class GraphManager : MonoBehaviour
     public IGraphMode currentMode;
     public List<Node> nodes = new List<Node>();
     public List<Edge> edges = new List<Edge>();
-    private List<int> initialStates;
+    public List<int> initialStates;
     public int stateCount = 0, transitionCount = 0;
 
     // Start is called before the first frame update
@@ -65,6 +65,17 @@ public class GraphManager : MonoBehaviour
     }
 
 
+    public void SimulateAll()
+    {
+        foreach(Node node in nodes)
+        {
+            if (node.CompareTag("Transition"))
+            {
+                FirePetriNetTransition((Transition)node);
+            }
+        }
+    }
+
     public void FirePetriNetTransition(Transition transition)
     {
         Debug.Log("Firing " + transition.transform.name);
@@ -74,7 +85,7 @@ public class GraphManager : MonoBehaviour
         int[] t_star = new int[stateCount];
 
         GetValuesForSimulation(transition, ref m, ref star_t, ref t_star);
-        if (initialStates == null)
+        if (initialStates.Count == 0)
             initialStates = new List<int>(m);
 
         string mString = string.Join(", ", m);
