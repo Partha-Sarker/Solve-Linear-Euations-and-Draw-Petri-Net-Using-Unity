@@ -5,7 +5,7 @@ public class KeyboardShortcutManager : MonoBehaviour
     public GraphManager graphManager;
     public GameObject graphModes;
     public bool EnableShortcut { set; get; } = true;
-    private bool ctrlDown = false;
+    private bool ctrlDown = false, shiftDown = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +23,11 @@ public class KeyboardShortcutManager : MonoBehaviour
             ctrlDown = true;
         else if (Input.GetKeyUp(KeyCode.LeftControl))
             ctrlDown = false;
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            shiftDown = true;
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+            shiftDown = false;
 
 
         if (Input.GetKeyDown(KeyCode.S) && !ctrlDown)
@@ -57,15 +62,25 @@ public class KeyboardShortcutManager : MonoBehaviour
             Debug.Log("Firing mode activate");
             graphManager.currentMode = graphModes.GetComponent<FiringMode>();
         }
-        else if(Input.GetKeyDown(KeyCode.R) && ctrlDown)
+        else if(Input.GetKeyDown(KeyCode.R) && ctrlDown && !shiftDown)
         {
             Debug.Log("Resetting states");
             graphManager.ResetStates();
         }
-        else if(Input.GetKeyDown(KeyCode.Space) && !ctrlDown)
+        //else if(Input.GetKeyDown(KeyCode.Space) && !ctrlDown)
+        //{
+        //    Debug.Log("Simulating whole petri net");
+        //    graphManager.SimulateAll();
+        //}
+        else if(Input.GetKeyDown(KeyCode.R) && ctrlDown && shiftDown)
         {
-            Debug.Log("Simulating whole petri net");
-            graphManager.SimulateAll();
+            Debug.Log("Clearing petri net");
+            graphManager.ClearAll();
+        }
+        else if(Input.GetKeyDown(KeyCode.X) && ctrlDown && shiftDown)
+        {
+            Debug.Log("Exiting application");
+            Application.Quit();
         }
     }
 }

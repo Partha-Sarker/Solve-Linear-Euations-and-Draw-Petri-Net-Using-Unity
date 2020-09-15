@@ -265,7 +265,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1308927424473938935}
   - component: {fileID: 5135357153907066085}
-  - component: {fileID: 5366537076652775730}
+  - component: {fileID: 3426879073563989489}
   - component: {fileID: 6582686343979225784}
   m_Layer: 0
   m_Name: Transition
@@ -339,7 +339,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &5366537076652775730
+--- !u!61 &3426879073563989489
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -356,14 +356,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.01, y: 2}
+    oldSize: {x: 0.67333335, y: 1.3333334}
     newSize: {x: 1.01, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.01, y: 2}
+  m_Size: {x: 0.67333335, y: 1.3333334}
   m_EdgeRadius: 0
 --- !u!114 &6582686343979225784
 MonoBehaviour:

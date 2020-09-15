@@ -65,17 +65,6 @@ public class GraphManager : MonoBehaviour
     }
 
 
-    public void SimulateAll()
-    {
-        foreach(Node node in nodes)
-        {
-            if (node.CompareTag("Transition"))
-            {
-                FirePetriNetTransition((Transition)node);
-            }
-        }
-    }
-
     public void FirePetriNetTransition(Transition transition)
     {
         Debug.Log("Firing " + transition.transform.name);
@@ -219,6 +208,22 @@ public class GraphManager : MonoBehaviour
             edges[i].gameObject.name = title;
             edges[i].SetWeightText();
         }
+    }
+
+    public void ClearAll()
+    {
+        foreach(Node node in nodes)
+        {
+            Destroy(node.gameObject);
+        }
+        nodes.Clear();
+        foreach(Edge edge in edges)
+        {
+            Destroy(edge.gameObject);
+        }
+        edges.Clear();
+        Debug.Log("Petri net cleared");
+        Refresh();
     }
 
     public Edge GetEdge(Node toNode, Node fromNode)

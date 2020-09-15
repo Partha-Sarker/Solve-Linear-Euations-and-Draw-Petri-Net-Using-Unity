@@ -94,8 +94,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 75
+  m_fontSizeBase: 75
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -342,7 +342,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.29999924
+        value: 0.08571243
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -475,12 +475,12 @@ PrefabInstance:
     - target: {fileID: 3268177890132502880, guid: c80e7b4523df7b849b6ab4df00cd0141,
         type: 3}
       propertyPath: m_fontSize
-      value: 100
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 3268177890132502880, guid: c80e7b4523df7b849b6ab4df00cd0141,
         type: 3}
       propertyPath: m_fontSizeBase
-      value: 100
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 3268177890132502880, guid: c80e7b4523df7b849b6ab4df00cd0141,
         type: 3}

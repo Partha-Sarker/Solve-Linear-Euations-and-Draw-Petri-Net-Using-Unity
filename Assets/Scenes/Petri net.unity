@@ -399,6 +399,7 @@ MonoBehaviour:
   graphModes: {fileID: 158495600}
   nodes: []
   edges: []
+  initialStates: 
   stateCount: 0
   transitionCount: 0
 --- !u!4 &1643280254
