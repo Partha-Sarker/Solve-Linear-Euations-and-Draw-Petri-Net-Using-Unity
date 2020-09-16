@@ -9,3 +9,7 @@
 - Press ctrl+r to reset states.
 - Press ctrl+shift+r to clear everything.
 - Press ctrl+shift+x to exit the application.
+- Use arrows to move camera left-right, up-down.
+- Scroll mouse wheel to adjust camera zoom.
+- Hold right-mouse-button and move mouse to drag the camera.
+- Hold right-mouse-button and scroll mouse wheel to adjust camera drag speed.

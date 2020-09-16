@@ -4,8 +4,11 @@ public class KeyboardShortcutManager : MonoBehaviour
 {
     public GraphManager graphManager;
     public GameObject graphModes;
+
+    public CameraController camController;
     public bool EnableShortcut { set; get; } = true;
     private bool ctrlDown = false, shiftDown = false;
+    private Vector2 arrowInput;
 
     // Start is called before the first frame update
     void Start()
@@ -67,11 +70,6 @@ public class KeyboardShortcutManager : MonoBehaviour
             Debug.Log("Resetting states");
             graphManager.ResetStates();
         }
-        //else if(Input.GetKeyDown(KeyCode.Space) && !ctrlDown)
-        //{
-        //    Debug.Log("Simulating whole petri net");
-        //    graphManager.SimulateAll();
-        //}
         else if(Input.GetKeyDown(KeyCode.R) && ctrlDown && shiftDown)
         {
             Debug.Log("Clearing petri net");
@@ -82,5 +80,30 @@ public class KeyboardShortcutManager : MonoBehaviour
             Debug.Log("Exiting application");
             Application.Quit();
         }
+
+        GetMovementInput();
+
+        camController.MoveCamera(arrowInput);
+    }
+
+    private void GetMovementInput()
+    {
+        if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow))
+            arrowInput.y = 0;
+        else if (Input.GetKey(KeyCode.UpArrow))
+            arrowInput.y = 1;
+        else if (Input.GetKey(KeyCode.DownArrow))
+            arrowInput.y = -1;
+        else
+            arrowInput.y = 0;
+
+        if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
+            arrowInput.x = 0;
+        else if (Input.GetKey(KeyCode.RightArrow))
+            arrowInput.x = 1;
+        else if (Input.GetKey(KeyCode.LeftArrow))
+            arrowInput.x = -1;
+        else
+            arrowInput.x = 0;
     }
 }
