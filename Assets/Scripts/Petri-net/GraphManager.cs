@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class GraphManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class GraphManager : MonoBehaviour
     public List<Edge> edges = new List<Edge>();
     public List<int> initialStates;
     public int stateCount = 0, transitionCount = 0;
+    public EventSystem eventSystem;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +21,9 @@ public class GraphManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (eventSystem.IsPointerOverGameObject())
+            return;
+
         if (Input.GetMouseButtonUp(0))
         {
             currentMode.OnClick();
