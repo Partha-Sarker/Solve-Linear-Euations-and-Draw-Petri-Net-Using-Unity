@@ -9,11 +9,6 @@ public class SceneController : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public void LoadStochastic()
-    {
-        SceneManager.LoadScene(2);
-    }
-
     public void ExitApplication()
     {
         Application.Quit();

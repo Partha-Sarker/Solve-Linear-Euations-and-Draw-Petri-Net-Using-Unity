@@ -18,24 +18,24 @@ public class Edge : MonoBehaviour, IEditable
         Destroy(gameObject);
     }
 
+    public void ActivateEditmode()
+    {
+        FindObjectOfType<KeyboardShortcutManager>().enableShortcut = false;
+        inputField.gameObject.SetActive(true);
+        inputField.ActivateInputField();
+        inputField.text = weightText.text;
+        weightText.text = "";
+    }
+
     public void OnEndEdit()
     {
-        FindObjectOfType<KeyboardShortcutManager>().EnableShortcut = true;
+        FindObjectOfType<KeyboardShortcutManager>().enableShortcut = true;
         inputField.gameObject.SetActive(false);
         string text = inputField.text;
         if (text == "" || text == "0")
             text = "1";
         weight = Int32.Parse(text);
         weightText.text = text;
-    }
-
-    public void ActivateEditmode()
-    {
-        FindObjectOfType<KeyboardShortcutManager>().EnableShortcut = false;
-        inputField.gameObject.SetActive(true);
-        inputField.ActivateInputField();
-        inputField.text = weightText.text;
-        weightText.text = "";
     }
 
     public void SetWeightText()

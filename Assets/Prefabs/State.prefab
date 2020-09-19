@@ -368,11 +368,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca175694d7c2b8949b991c9759596224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  value: 0
   titleText: {fileID: 1097362195}
+  valueInputField: {fileID: 6504511632238208488}
+  valueText: {fileID: 5988142137055345475}
   position: 0
-  tokenCount: 0
-  inputField: {fileID: 6504511632238208488}
-  tokenCountText: {fileID: 5988142137055345475}
 --- !u!1 &1752482613215990990
 GameObject:
   m_ObjectHideFlags: 0
@@ -645,6 +645,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontSizeBase
       value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3268177890132502880, guid: c80e7b4523df7b849b6ab4df00cd0141,
+        type: 3}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3268177890132502894, guid: c80e7b4523df7b849b6ab4df00cd0141,
+        type: 3}
+      propertyPath: m_Name
+      value: token text
       objectReference: {fileID: 0}
     - target: {fileID: 3268177891159830841, guid: c80e7b4523df7b849b6ab4df00cd0141,
         type: 3}

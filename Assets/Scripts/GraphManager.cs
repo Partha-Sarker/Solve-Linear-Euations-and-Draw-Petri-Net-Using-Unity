@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
@@ -10,20 +11,18 @@ public class GraphManager : MonoBehaviour
     public List<Edge> edges = new List<Edge>();
     public List<int> initialStates;
     public int stateCount = 0, transitionCount = 0;
-    public EventSystem eventSystem;
+    public bool isSimulating = false;
 
     // Start is called before the first frame update
     void Start()
     {
         currentMode = graphModes.GetComponent<AddStateMode>();
+        Refresh();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (eventSystem.IsPointerOverGameObject())
-            return;
-
         if (Input.GetMouseButtonUp(0))
         {
             currentMode.OnClick();
@@ -70,6 +69,89 @@ public class GraphManager : MonoBehaviour
     }
 
 
+    public void Simulate()
+    {
+        if (isSimulating)
+        {
+            StopAllCoroutines();
+            isSimulating = false;
+            return;
+        }
+
+        foreach(Node node in nodes)
+        {
+            if(node.CompareTag("State") && node.position == 1)
+            {
+                if (node.value <= 0)
+                {
+                    Debug.LogError("S1 has no token. Simulation can't be started.");
+                    return;
+                }
+                isSimulating = true;
+                Debug.Log("Simulation Started");
+                StartCoroutine(StartStochasticSimulation(node));
+                return;
+            }
+        }
+    }
+
+    IEnumerator StartStochasticSimulation(Node state)
+    {
+        if (state.value <= 0)
+            yield break;
+
+        Debug.Log($"Activating {state.transform.name}:");
+        yield return new WaitForSeconds(1f);
+
+        List<Node> connectedTransitions = GetOutgoingNodes(state);
+        Debug.Log($"{state.transform.name} is connected with:");
+        foreach(Node connectedTransition in connectedTransitions)
+        {
+            Debug.Log(connectedTransition.transform.name);
+        }
+
+        Node selectedTransition = SelectTransitionByProbability(connectedTransitions);
+        if (selectedTransition == null)
+            yield break;
+        if (CheckStochasticTransitionFireCondition(selectedTransition))
+        {
+            FirePetriNetTransition((Transition)selectedTransition);
+            List<Node> connectedStates = GetOutgoingNodes(selectedTransition);
+            foreach (Node connectedState in connectedStates)
+                StartCoroutine(StartStochasticSimulation(connectedState));
+        }
+    }
+
+    private Node SelectTransitionByProbability(List<Node> transitions)
+    {
+        int sumOfProb = 0;
+        foreach(Node node in transitions)
+        {
+            sumOfProb += node.value;
+        }
+        int randomNumebr = Random.Range(1, sumOfProb + 1);
+        int tempSum = 0;
+        foreach(Node node in transitions)
+        {
+            if (randomNumebr >= tempSum && randomNumebr <= node.value + tempSum)
+                return node;
+            tempSum += node.value;
+        }
+        return null;
+    }
+
+    private bool CheckStochasticTransitionFireCondition(Node transition)
+    {
+        List<Node> states = GetIncomingNodes(transition);
+        foreach(Node state in states)
+        {
+            if (state.value <= 0)
+                return false;
+        }
+        return true;
+    }
+
+
     public void FirePetriNetTransition(Transition transition)
     {
         Debug.Log("Firing " + transition.transform.name);
@@ -86,17 +168,20 @@ public class GraphManager : MonoBehaviour
         string star_tString = string.Join(", ", star_t);
         string t_starString = string.Join(", ", t_star);
 
-        Debug.Log($"m: {mString}, *t: {star_tString}, t*: {t_starString}");
+        //Debug.Log($"m: {mString}, *t: {star_tString}, t*: {t_starString}");
 
         if (TestStateMovingCondition(star_t, m) == false)
         {
-            Debug.LogError("Can't fire " + transition.transform.name);
+            //Debug.LogError("Can't fire " + transition.transform.name);
             return;
         }
 
+        //SetTransitionFireColor(transition);
+        transition.SetFiringColor();
+
         int[] m_prime = GetNewStates(m, star_t, t_star);
         string m_primeString = string.Join(", ", m_prime);
-        Debug.Log($"New state: {m_primeString}");
+        //Debug.Log($"New state: {m_primeString}");
 
         SetNewStates(m_prime);
     }
@@ -111,7 +196,7 @@ public class GraphManager : MonoBehaviour
             if (tag == "State")
             {
                 State state = (State)node;
-                m[count++] = state.tokenCount;
+                m[count++] = state.value;
             }
         }
 
@@ -157,15 +242,31 @@ public class GraphManager : MonoBehaviour
             if (node.CompareTag("State"))
             {
                 State state = (State)node;
-                state.tokenCount = m_prime[state.position - 1];
+                state.value = m_prime[state.position - 1];
             }
         }
         Refresh();
     }
 
+    //private void SetTransitionFireColor(Transition targetTransition)
+    //{
+    //    foreach(Node node in nodes)
+    //    {
+    //        if (node.CompareTag("Transition"))
+    //        {
+    //            Transition transition = (Transition)node;
+    //            if (transition == targetTransition)
+    //                transition.SetFiringColor();
+    //            else
+    //                transition.ResetColor();
+    //        }
+    //    }
+    //}
+
 
     public void ResetStates()
     {
+        //SetTransitionFireColor(null);
         if(initialStates == null)
         {
             Debug.Log("Nothing to reset");
@@ -181,7 +282,7 @@ public class GraphManager : MonoBehaviour
         }
     }
 
-    public void Refresh()
+    private void Refresh()
     {
         stateCount = 0; transitionCount = 0;
         foreach(Node node in nodes)
@@ -193,8 +294,6 @@ public class GraphManager : MonoBehaviour
             {
                 stateCount++;
                 title = "S" + stateCount;
-                State state = (State)node;
-                state.SetTokenText();
                 node.position = stateCount;
             }
             else
@@ -203,6 +302,7 @@ public class GraphManager : MonoBehaviour
                 title = "T" + transitionCount;
                 node.position = transitionCount;
             }
+            node.SetValueText();
             nodeGameObject.name = title;
             node.SetTitleText(title);
         }
@@ -231,7 +331,7 @@ public class GraphManager : MonoBehaviour
         Refresh();
     }
 
-    public Edge GetEdge(Node toNode, Node fromNode)
+    private Edge GetEdge(Node toNode, Node fromNode)
     {
         foreach(Edge edge in edges)
         {
@@ -242,4 +342,45 @@ public class GraphManager : MonoBehaviour
         }
         return null;
     }
+
+    private List<Node> GetOutgoingNodes(Node node)
+    {
+        List<Node> nodes = new List<Node>();
+        foreach(Edge edge in edges)
+        {
+            if(edge.fromNode == node)
+            {
+                nodes.Add(edge.toNode);
+            }
+        }
+
+        return nodes;
+    }
+
+    private List<Node> GetIncomingNodes(Node node)
+    {
+        List<Node> nodes = new List<Node>();
+        foreach (Edge edge in edges)
+        {
+            if (edge.toNode == node)
+            {
+                nodes.Add(edge.fromNode);
+            }
+        }
+
+        return nodes;
+    }
+
+    //private List<State> GetIncomingStates(Transition transition)
+    //{
+    //    List<State> states = new List<State>();
+    //    foreach(Edge edge in edges)
+    //    {
+    //        if(edge.fromNode == transition)
+    //        {
+
+    //        }
+    //    }
+    //    return states;
+    //}
 }

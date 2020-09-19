@@ -4,9 +4,10 @@ public class KeyboardShortcutManager : MonoBehaviour
 {
     public GraphManager graphManager;
     public GameObject graphModes;
+    public SceneController sceneController;
 
     public CameraController camController;
-    public bool EnableShortcut { set; get; } = true;
+    public bool enableShortcut = true;
     private bool ctrlDown = false, shiftDown = false;
     private Vector2 arrowInput;
 
@@ -19,8 +20,11 @@ public class KeyboardShortcutManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!EnableShortcut)
+        if (!enableShortcut)
             return;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            sceneController.Back();
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
             ctrlDown = true;
@@ -79,6 +83,11 @@ public class KeyboardShortcutManager : MonoBehaviour
         {
             Debug.Log("Exiting application");
             Application.Quit();
+        }
+        else if(Input.GetKeyDown(KeyCode.Space) && ctrlDown && shiftDown)
+        {
+            graphManager.currentMode = graphModes.GetComponent<DoNothingMode>();
+            graphManager.Simulate();
         }
 
         GetMovementInput();

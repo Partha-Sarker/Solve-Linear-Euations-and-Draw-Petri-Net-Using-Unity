@@ -15,10 +15,9 @@ public class InputMode : MonoBehaviour, IGraphMode
         if (hit.collider != null)
         {
             string tag = hit.transform.tag;
-            if(tag == "State" || tag == "Edge")
+            if(tag == "State" || tag == "Edge" || tag == "Transition")
             {
                 Debug.Log("Should input now");
-                keyboardShortcutManager.EnableShortcut = false;
                 IEditable editable = hit.transform.GetComponent<IEditable>();
                 editable.ActivateEditmode();
             }
