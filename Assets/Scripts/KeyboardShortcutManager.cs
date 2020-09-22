@@ -72,13 +72,11 @@ public class KeyboardShortcutManager : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.R) && ctrlDown && !shiftDown)
         {
-            Debug.Log("Resetting states");
-            graphManager.ResetStates();
+            ResetGraphStates();
         }
         else if(Input.GetKeyDown(KeyCode.R) && ctrlDown && shiftDown)
         {
-            Debug.Log("Clearing petri net");
-            graphManager.ClearAll();
+            DeleteAll();
         }
         else if(Input.GetKeyDown(KeyCode.X) && ctrlDown && shiftDown)
         {
@@ -95,14 +93,26 @@ public class KeyboardShortcutManager : MonoBehaviour
         camController.MoveCamera(arrowInput);
     }
 
+    public void ResetGraphStates()
+    {
+        Debug.Log("Resetting states");
+        graphManager.ResetStates();
+    }
+
     public void SimulateGraph()
     {
-        graphManager.currentMode = graphModes.GetComponent<DoNothingMode>();
+        //graphManager.currentMode = graphModes.GetComponent<DoNothingMode>();
         bool isPlaying = graphManager.Simulate();
         if (isPlaying)
             uiManager.SetStopUI();
         else
             uiManager.SetPlayUI();
+    }
+
+    public void DeleteAll()
+    {
+        Debug.Log("Clearing petri net");
+        graphManager.ClearAll();
     }
 
     private void GetMovementInput()

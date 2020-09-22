@@ -12,7 +12,7 @@ public class GraphManager : MonoBehaviour
     public List<int> initialStates;
     public int stateCount = 0, transitionCount = 0;
     public bool isSimulating = false;
-    //public bool enableGraph = true;
+    public bool enableGraph = true;
     public EventSystem eventSystem;
 
     // Start is called before the first frame update
@@ -25,9 +25,8 @@ public class GraphManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (eventSystem.IsPointerOverGameObject())
+        if (!enableGraph)
             return;
-
         if (Input.GetMouseButtonUp(0))
         {
             currentMode.OnClick();
@@ -377,15 +376,15 @@ public class GraphManager : MonoBehaviour
     }
 
 
-    //public void EnableGraph()
-    //{
-    //    enableGraph = true;
-    //}
+    public void EnableGraph()
+    {
+        enableGraph = true;
+    }
 
-    //public void DisableGraph()
-    //{
-    //    enableGraph = false;
-    //}
+    public void DisableGraph()
+    {
+        enableGraph = false;
+    }
 
     //private List<State> GetIncomingStates(Transition transition)
     //{
