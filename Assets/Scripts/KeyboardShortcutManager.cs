@@ -5,6 +5,7 @@ public class KeyboardShortcutManager : MonoBehaviour
     public GraphManager graphManager;
     public GameObject graphModes;
     public SceneController sceneController;
+    public UIManager uiManager;
 
     public CameraController camController;
     public bool enableShortcut = true;
@@ -86,13 +87,22 @@ public class KeyboardShortcutManager : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.Space) && ctrlDown && shiftDown)
         {
-            graphManager.currentMode = graphModes.GetComponent<DoNothingMode>();
-            graphManager.Simulate();
+            SimulateGraph();
         }
 
         GetMovementInput();
 
         camController.MoveCamera(arrowInput);
+    }
+
+    public void SimulateGraph()
+    {
+        graphManager.currentMode = graphModes.GetComponent<DoNothingMode>();
+        bool isPlaying = graphManager.Simulate();
+        if (isPlaying)
+            uiManager.SetStopUI();
+        else
+            uiManager.SetPlayUI();
     }
 
     private void GetMovementInput()

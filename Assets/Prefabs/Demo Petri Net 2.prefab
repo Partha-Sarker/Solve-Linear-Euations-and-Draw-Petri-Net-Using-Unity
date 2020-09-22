@@ -7655,6 +7655,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 8657136485742014967}
   fireColor: {r: 0.8018868, g: 0, b: 0, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  resetDelay: 1
 --- !u!1 &2899117473984147945
 GameObject:
   m_ObjectHideFlags: 0
@@ -8614,6 +8615,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 2083118426471186147}
   fireColor: {r: 0.8018868, g: 0, b: 0, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  resetDelay: 1
 --- !u!1 &3153246240870134232
 GameObject:
   m_ObjectHideFlags: 0
@@ -19641,6 +19643,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7056214701338658774}
   fireColor: {r: 0.8018868, g: 0, b: 0, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  resetDelay: 1
 --- !u!1 &6151414586064558520
 GameObject:
   m_ObjectHideFlags: 0
@@ -23860,6 +23863,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7027392997567228923}
   fireColor: {r: 0.8018868, g: 0, b: 0, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  resetDelay: 1
 --- !u!1 &7589861936295905880
 GameObject:
   m_ObjectHideFlags: 0
@@ -24403,6 +24407,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 5248520434930765464}
   fireColor: {r: 0.8018868, g: 0, b: 0, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  resetDelay: 1
 --- !u!1 &7827468725575712735
 GameObject:
   m_ObjectHideFlags: 0
@@ -26831,6 +26836,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 5770504046374318940}
   fireColor: {r: 0.8018868, g: 0, b: 0, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  resetDelay: 1
 --- !u!1 &8982439032649066354
 GameObject:
   m_ObjectHideFlags: 0

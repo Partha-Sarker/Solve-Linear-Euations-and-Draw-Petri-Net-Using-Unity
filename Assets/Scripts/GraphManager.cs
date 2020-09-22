@@ -12,6 +12,8 @@ public class GraphManager : MonoBehaviour
     public List<int> initialStates;
     public int stateCount = 0, transitionCount = 0;
     public bool isSimulating = false;
+    //public bool enableGraph = true;
+    public EventSystem eventSystem;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +25,9 @@ public class GraphManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (eventSystem.IsPointerOverGameObject())
+            return;
+
         if (Input.GetMouseButtonUp(0))
         {
             currentMode.OnClick();
@@ -69,13 +74,13 @@ public class GraphManager : MonoBehaviour
     }
 
 
-    public void Simulate()
+    public bool Simulate()
     {
         if (isSimulating)
         {
             StopAllCoroutines();
             isSimulating = false;
-            return;
+            return false;
         }
 
         foreach(Node node in nodes)
@@ -85,14 +90,14 @@ public class GraphManager : MonoBehaviour
                 if (node.value <= 0)
                 {
                     Debug.LogError("S1 has no token. Simulation can't be started.");
-                    return;
+                    return false;
                 }
                 isSimulating = true;
                 Debug.Log("Simulation Started");
                 StartCoroutine(StartStochasticSimulation(node));
-                return;
             }
         }
+        return true;
     }
 
     IEnumerator StartStochasticSimulation(Node state)
@@ -370,6 +375,17 @@ public class GraphManager : MonoBehaviour
 
         return nodes;
     }
+
+
+    //public void EnableGraph()
+    //{
+    //    enableGraph = true;
+    //}
+
+    //public void DisableGraph()
+    //{
+    //    enableGraph = false;
+    //}
 
     //private List<State> GetIncomingStates(Transition transition)
     //{
