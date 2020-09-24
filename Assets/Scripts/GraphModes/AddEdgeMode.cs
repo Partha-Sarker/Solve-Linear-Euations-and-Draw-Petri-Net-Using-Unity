@@ -36,9 +36,8 @@ public class AddEdgeMode : MonoBehaviour, IGraphMode
         }
     }
 
-    private void CreateEdge(Node fromNode, Node toNode)
+    public Edge CreateEdge(Node fromNode, Node toNode)
     {
-
         GameObject newEdgeGameObject = Instantiate(edgeGameObject);
         Edge edge = newEdgeGameObject.GetComponent<Edge>();
 
@@ -48,5 +47,6 @@ public class AddEdgeMode : MonoBehaviour, IGraphMode
         edge.Init();
 
         graphManager.AddEdge(edge);
+        return edge;
     }
 }

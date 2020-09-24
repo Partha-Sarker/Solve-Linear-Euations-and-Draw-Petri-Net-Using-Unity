@@ -48,7 +48,7 @@ public class CameraController : MonoBehaviour
 
     public void MoveCamera(Vector3 input)
     {
-        transform.position += input * camMoveSmoothness;
+        transform.position -= input * camMoveSmoothness;
     }
 
     private void ManageScrollInput()

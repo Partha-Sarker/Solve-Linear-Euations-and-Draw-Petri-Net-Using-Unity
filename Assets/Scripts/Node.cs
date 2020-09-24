@@ -7,16 +7,10 @@ public class Node : MonoBehaviour, IEditable
     [HideInInspector]
     public int value;
     [HideInInspector]
-    public Vector3 WorldPos;
     public TextMeshProUGUI titleText;
     public TMP_InputField valueInputField;
     public TextMeshProUGUI valueText;
     public int position;
-
-    private void Start()
-    {
-        WorldPos = transform.position;
-    }
 
     public void ActivateEditmode()
     {

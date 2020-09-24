@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.EventSystems;
+using System.IO;
 
 public class GraphManager : MonoBehaviour
 {
@@ -13,7 +13,6 @@ public class GraphManager : MonoBehaviour
     public int stateCount = 0, transitionCount = 0;
     public bool isSimulating = false;
     public bool enableGraph = true;
-    public EventSystem eventSystem;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +26,7 @@ public class GraphManager : MonoBehaviour
     {
         if (!enableGraph)
             return;
+
         if (Input.GetMouseButtonUp(0))
         {
             currentMode.OnClick();
@@ -252,21 +252,6 @@ public class GraphManager : MonoBehaviour
         Refresh();
     }
 
-    //private void SetTransitionFireColor(Transition targetTransition)
-    //{
-    //    foreach(Node node in nodes)
-    //    {
-    //        if (node.CompareTag("Transition"))
-    //        {
-    //            Transition transition = (Transition)node;
-    //            if (transition == targetTransition)
-    //                transition.SetFiringColor();
-    //            else
-    //                transition.ResetColor();
-    //        }
-    //    }
-    //}
-
 
     public void ResetStates()
     {
@@ -386,16 +371,93 @@ public class GraphManager : MonoBehaviour
         enableGraph = false;
     }
 
-    //private List<State> GetIncomingStates(Transition transition)
-    //{
-    //    List<State> states = new List<State>();
-    //    foreach(Edge edge in edges)
-    //    {
-    //        if(edge.fromNode == transition)
-    //        {
+    public void SaveGraph(int index)
+    {
+        if(nodes.Count == 0)
+        {
+            Debug.LogError("Nothing to save");
+            return;
+        }
+        Refresh();
+        PetriNet petriNet = new PetriNet(nodes, edges);
+        string jsonString = JsonUtility.ToJson(petriNet);
+        Debug.Log(jsonString);
+        string path = Application.dataPath + $"/Data/{index}.json";
+        File.WriteAllText(path, jsonString);
+        //LoadGraph(0);
+        Debug.Log("Petri net saved on slot " + index);
+    }
 
+    public void LoadGraph(int index)
+    {
+        string path = Application.dataPath + $"/Data/{index}.json";
+        string jsonString = "";
+        try
+        {
+            jsonString = File.ReadAllText(path);
+        }
+        catch (System.Exception) { }
+
+        if(jsonString == "")
+        {
+            Debug.LogError($"slot {index} is empty");
+            return;
+        }
+
+        ClearAll();
+        PetriNet petriNet = JsonUtility.FromJson<PetriNet>(jsonString);
+
+        AddStateMode addStateMode = FindObjectOfType<AddStateMode>();
+        AddTransitionMode addTransitionMode = FindObjectOfType<AddTransitionMode>();
+        AddEdgeMode addEdgeMode = FindObjectOfType<AddEdgeMode>();
+
+        foreach (NodeInfo nodeInfo in petriNet.nodeInfos)
+        {
+            int value = nodeInfo.value;
+            Vector3 pos = nodeInfo.WorldPos;
+            if (nodeInfo.tag == "State")
+                addStateMode.AddState(pos).value = value;
+            else
+                addTransitionMode.AddTransition(pos).value = value;
+        }
+        foreach(EdgeInfo edgeInfo in petriNet.edgeInfos)
+        {
+            Node toNode = FindNode(edgeInfo.toNodeTag, edgeInfo.toNodePosition);
+            Node fromNode = FindNode(edgeInfo.fromNodeTag, edgeInfo.fromNodePosition);
+            addEdgeMode.CreateEdge(fromNode, toNode).weight = edgeInfo.weight;
+        }
+        Debug.Log($"Petri-net loaded from slot {index}");
+        Refresh();
+    }
+
+    private Node FindNode(string tag, int position)
+    {
+        int count = 0;
+        foreach(Node node in nodes)
+        {
+            if (node.CompareTag(tag))
+            {
+                count++;
+                if (count == position)
+                    return node;
+            }
+        }
+        return null;
+    }
+
+
+    //private void SetTransitionFireColor(Transition targetTransition)
+    //{
+    //    foreach(Node node in nodes)
+    //    {
+    //        if (node.CompareTag("Transition"))
+    //        {
+    //            Transition transition = (Transition)node;
+    //            if (transition == targetTransition)
+    //                transition.SetFiringColor();
+    //            else
+    //                transition.ResetColor();
     //        }
     //    }
-    //    return states;
     //}
 }

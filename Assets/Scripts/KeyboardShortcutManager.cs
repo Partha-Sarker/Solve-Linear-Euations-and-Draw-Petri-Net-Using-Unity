@@ -9,8 +9,8 @@ public class KeyboardShortcutManager : MonoBehaviour
 
     public CameraController camController;
     public bool enableShortcut = true;
-    private bool ctrlDown = false, shiftDown = false;
-    private Vector2 arrowInput;
+    private bool ctrlDown = false, shiftDown = false, altDown;
+    private Vector2 moveInput;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +27,11 @@ public class KeyboardShortcutManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
             sceneController.Back();
 
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
+            altDown = true;
+        else if (Input.GetKeyUp(KeyCode.LeftAlt))
+            altDown = false;
+
         if (Input.GetKeyDown(KeyCode.LeftControl))
             ctrlDown = true;
         else if (Input.GetKeyUp(KeyCode.LeftControl))
@@ -38,59 +43,75 @@ public class KeyboardShortcutManager : MonoBehaviour
             shiftDown = false;
 
 
-        if (Input.GetKeyDown(KeyCode.S) && !ctrlDown)
-        {
-            Debug.Log("Add state mode activated");
-            graphManager.currentMode = graphModes.GetComponent<AddStateMode>();
-        }
-        else if (Input.GetKeyDown(KeyCode.T) && !ctrlDown)
-        {
-            Debug.Log("Add transition mode activated");
-            graphManager.currentMode = graphModes.GetComponent<AddTransitionMode>();
-        }
-        else if (Input.GetKeyDown(KeyCode.D) && ctrlDown)
+        if (Input.GetKeyDown(KeyCode.D) && ctrlDown && !shiftDown)
         {
             Debug.Log("Delete mode activated");
             graphManager.currentMode = graphModes.GetComponent<DeleteMode>();
         }
-        else if (Input.GetKeyDown(KeyCode.E) && !ctrlDown)
+        else if (Input.GetKeyDown(KeyCode.E) && !ctrlDown && !shiftDown)
         {
             Debug.Log("Add edge mode activated");
             AddEdgeMode addEdgeMode = graphModes.GetComponent<AddEdgeMode>();
             addEdgeMode.prevNode = null;
             graphManager.currentMode = addEdgeMode;
         }
-        else if (Input.GetKeyDown(KeyCode.E) && ctrlDown)
+        else if (Input.GetKeyDown(KeyCode.E) && ctrlDown && !shiftDown)
         {
             Debug.Log("Edit mode activated");
             graphManager.currentMode = graphModes.GetComponent<InputMode>();
         }
-        else if(Input.GetKeyDown(KeyCode.F) && ctrlDown)
+        else if (Input.GetKeyDown(KeyCode.F) && ctrlDown && !shiftDown)
         {
             Debug.Log("Firing mode activate");
             graphManager.currentMode = graphModes.GetComponent<FiringMode>();
         }
-        else if(Input.GetKeyDown(KeyCode.R) && ctrlDown && !shiftDown)
+        else if (Input.GetKeyDown(KeyCode.R) && ctrlDown && !shiftDown)
         {
             ResetGraphStates();
         }
-        else if(Input.GetKeyDown(KeyCode.R) && ctrlDown && shiftDown)
+        else if (Input.GetKeyDown(KeyCode.R) && ctrlDown && shiftDown)
         {
             DeleteAll();
+        }
+        else if (Input.GetKeyDown(KeyCode.S) && !ctrlDown && !shiftDown)
+        {
+            Debug.Log("Add state mode activated");
+            graphManager.currentMode = graphModes.GetComponent<AddStateMode>();
+        }
+        else if (Input.GetKeyDown(KeyCode.T) && !ctrlDown && !shiftDown)
+        {
+            Debug.Log("Add transition mode activated");
+            graphManager.currentMode = graphModes.GetComponent<AddTransitionMode>();
         }
         else if(Input.GetKeyDown(KeyCode.X) && ctrlDown && shiftDown)
         {
             Debug.Log("Exiting application");
             Application.Quit();
         }
-        else if(Input.GetKeyDown(KeyCode.Space) && ctrlDown && shiftDown)
+        else if (Input.GetKeyDown(KeyCode.Space) && ctrlDown && shiftDown)
         {
             SimulateGraph();
         }
+        else
+        {
+            for(int i=0; i<10; i++)
+            {
+                if (Input.GetKeyDown("" + i) && altDown && !shiftDown)
+                {
+                    graphManager.SaveGraph(i);
+                }
+                else if(Input.GetKeyDown("" + i) && altDown && shiftDown)
+                {
+                    graphManager.LoadGraph(i);
+                }
+            }
+        }
+
+
 
         GetMovementInput();
 
-        camController.MoveCamera(arrowInput);
+        camController.MoveCamera(moveInput);
     }
 
     public void ResetGraphStates()
@@ -118,21 +139,21 @@ public class KeyboardShortcutManager : MonoBehaviour
     private void GetMovementInput()
     {
         if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow))
-            arrowInput.y = 0;
+            moveInput.y = 0;
         else if (Input.GetKey(KeyCode.UpArrow))
-            arrowInput.y = 1;
+            moveInput.y = 1;
         else if (Input.GetKey(KeyCode.DownArrow))
-            arrowInput.y = -1;
+            moveInput.y = -1;
         else
-            arrowInput.y = 0;
+            moveInput.y = 0;
 
         if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
-            arrowInput.x = 0;
+            moveInput.x = 0;
         else if (Input.GetKey(KeyCode.RightArrow))
-            arrowInput.x = 1;
+            moveInput.x = 1;
         else if (Input.GetKey(KeyCode.LeftArrow))
-            arrowInput.x = -1;
+            moveInput.x = -1;
         else
-            arrowInput.x = 0;
+            moveInput.x = 0;
     }
 }

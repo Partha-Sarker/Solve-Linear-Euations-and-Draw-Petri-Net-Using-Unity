@@ -15,7 +15,13 @@ public class AddTransitionMode : MonoBehaviour, IGraphMode
         Collider2D col = Physics2D.OverlapCircle(mouseWorldPos, minDistance);
         if (col != null)
             return;
-        Node node = Instantiate(transition, mouseWorldPos, Quaternion.identity).GetComponent<Transition>();
+        AddTransition(mouseWorldPos);
+    }
+
+    public Node AddTransition(Vector3 position)
+    {
+        Node node = Instantiate(transition, position, Quaternion.identity).GetComponent<Node>();
         graphManager.AddNode(node);
+        return node;
     }
 }

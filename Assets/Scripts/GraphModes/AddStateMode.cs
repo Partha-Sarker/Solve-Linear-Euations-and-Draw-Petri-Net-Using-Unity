@@ -13,7 +13,13 @@ public class AddStateMode : MonoBehaviour, IGraphMode
         Collider2D col = Physics2D.OverlapCircle(mouseWorldPos, minDistance);
         if (col != null)
             return;
-        Node node = Instantiate(state, mouseWorldPos, Quaternion.identity).GetComponent<State>();
+        AddState(mouseWorldPos);
+    }
+
+    public Node AddState(Vector3 position)
+    {
+        Node node = Instantiate(state, position, Quaternion.identity).GetComponent<Node>();
         graphManager.AddNode(node);
+        return node;
     }
 }
