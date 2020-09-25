@@ -34,11 +34,11 @@ public class GraphManager : MonoBehaviour
     }
 
     public void AddNode(Node node)
+
     {
         nodes.Add(node);
         Refresh();
     }
-
     public void RemoveNode(Node node)
     {
         List<Edge> edgeRemoveList = new List<Edge>();
@@ -358,17 +358,6 @@ public class GraphManager : MonoBehaviour
         }
 
         return nodes;
-    }
-
-
-    public void EnableGraph()
-    {
-        enableGraph = true;
-    }
-
-    public void DisableGraph()
-    {
-        enableGraph = false;
     }
 
     public void SaveGraph(int index)

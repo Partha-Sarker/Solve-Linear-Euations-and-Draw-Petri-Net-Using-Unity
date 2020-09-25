@@ -71,12 +71,11 @@ public class KeyboardShortcutManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.R) && ctrlDown && shiftDown)
         {
-            DeleteAll();
+            ClearAll();
         }
         else if (Input.GetKeyDown(KeyCode.S) && !ctrlDown && !shiftDown)
         {
-            Debug.Log("Add state mode activated");
-            graphManager.currentMode = graphModes.GetComponent<AddStateMode>();
+            ActivateAddStateMode();
         }
         else if (Input.GetKeyDown(KeyCode.T) && !ctrlDown && !shiftDown)
         {
@@ -114,6 +113,14 @@ public class KeyboardShortcutManager : MonoBehaviour
         camController.MoveCamera(moveInput);
     }
 
+    public void ActivateAddStateMode()
+    {
+        string logText = "Add state mode activated";
+        Debug.Log(logText);
+        uiManager.AddLog(logText);
+        graphManager.currentMode = graphModes.GetComponent<AddStateMode>();
+    }
+
     public void ResetGraphStates()
     {
         Debug.Log("Resetting states");
@@ -122,7 +129,6 @@ public class KeyboardShortcutManager : MonoBehaviour
 
     public void SimulateGraph()
     {
-        //graphManager.currentMode = graphModes.GetComponent<DoNothingMode>();
         bool isPlaying = graphManager.Simulate();
         if (isPlaying)
             uiManager.SetStopUI();
@@ -130,10 +136,13 @@ public class KeyboardShortcutManager : MonoBehaviour
             uiManager.SetPlayUI();
     }
 
-    public void DeleteAll()
+    public void ClearAll()
     {
-        Debug.Log("Clearing petri net");
+        string logText = "Clearing petri net";
+        Debug.Log(logText);
+        uiManager.AddLog(logText);
         graphManager.ClearAll();
+
     }
 
     private void GetMovementInput()

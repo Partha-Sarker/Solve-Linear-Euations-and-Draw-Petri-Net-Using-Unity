@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour
     private Vector3 startCamPos, startMousePos, currentMousePos, difference;
     public Camera cam;
     public bool isDragging = false;
+    public bool canZoom = true;
     public float initialDragSpeed = 1, currentDragSpeed, scrollInput, scrollMultiplier = 5, camMoveSmoothness = .2f;
     private float initialCamSize, currentCamSize;
 
@@ -53,6 +54,9 @@ public class CameraController : MonoBehaviour
 
     private void ManageScrollInput()
     {
+        if (!canZoom)
+            return;
+
         if (isDragging)
         {
             currentDragSpeed -= scrollInput * scrollMultiplier * -1;
