@@ -1,5 +1,5 @@
 # Petri-net Stochastic
-## Keyboard Shortcuts4
+## Keyboard Shortcuts
 - Press escape to go back.
 - Press s and click to create state.
 - Press t and click to create transition.
@@ -17,3 +17,5 @@
 - Scroll mouse wheel to adjust camera zoom.
 - Hold right-mouse-button to drag the camera.
 - Hold right-mouse-button and scroll mouse wheel to adjust camera drag speed.
+
+Press the log button to toggle the visibility of log screen.
