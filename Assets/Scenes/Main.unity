@@ -1220,7 +1220,7 @@ PrefabInstance:
     - target: {fileID: 3634987421756922940, guid: 73ec086c597255548816a0e1fb2a12fe,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3634987423048624956, guid: 73ec086c597255548816a0e1fb2a12fe,
         type: 3}
@@ -1257,9 +1257,9 @@ PrefabInstance:
         - Press ctrl+shift+x to exit the application.
 
         -
-        Press alt+[0-9] to save petri-net.
+        Press alt+shift+[0-9] to save petri-net.
 
-        - Press alt+shift+[0-9] to load
+        - Press alt+[0-9] to load
         petri-net.
 
         - Use arrows to move camera left-right, up-down.
@@ -1276,7 +1276,7 @@ PrefabInstance:
     - target: {fileID: 3634987423048624956, guid: 73ec086c597255548816a0e1fb2a12fe,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 811
+      value: 810
       objectReference: {fileID: 0}
     - target: {fileID: 3634987423048624956, guid: 73ec086c597255548816a0e1fb2a12fe,
         type: 3}

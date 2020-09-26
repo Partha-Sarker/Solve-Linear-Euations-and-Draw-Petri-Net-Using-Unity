@@ -6,6 +6,7 @@ using System.IO;
 public class GraphManager : MonoBehaviour
 {
     public GameObject graphModes;
+    public UIManager uiManager;
     public IGraphMode currentMode;
     public List<Node> nodes = new List<Node>();
     public List<Edge> edges = new List<Edge>();
@@ -13,6 +14,8 @@ public class GraphManager : MonoBehaviour
     public int stateCount = 0, transitionCount = 0;
     public bool isSimulating = false;
     public bool enableGraph = true;
+
+    private Object _lock = new Object();
 
     // Start is called before the first frame update
     void Start()
@@ -117,6 +120,13 @@ public class GraphManager : MonoBehaviour
         Node selectedTransition = SelectTransitionByProbability(connectedTransitions);
         if (selectedTransition == null)
             yield break;
+
+        float lambda = (float)GetSumOfProbability(connectedTransitions);
+        float randomNum = Random.Range(0f, 1f);
+        float waitingTime = -(1 / lambda) * Mathf.Log(1 - randomNum);
+
+        uiManager.AddLog($"Waiting time for {selectedTransition.transform.name} is {waitingTime}");
+
         if (CheckStochasticTransitionFireCondition(selectedTransition))
         {
             FirePetriNetTransition((Transition)selectedTransition);
@@ -128,11 +138,7 @@ public class GraphManager : MonoBehaviour
 
     private Node SelectTransitionByProbability(List<Node> transitions)
     {
-        int sumOfProb = 0;
-        foreach(Node node in transitions)
-        {
-            sumOfProb += node.value;
-        }
+        int sumOfProb = GetSumOfProbability(transitions);
         int randomNumebr = Random.Range(1, sumOfProb + 1);
         int tempSum = 0;
         foreach(Node node in transitions)
@@ -142,6 +148,16 @@ public class GraphManager : MonoBehaviour
             tempSum += node.value;
         }
         return null;
+    }
+
+    private int GetSumOfProbability(List<Node> transitions)
+    {
+        int sumOfProb = 0;
+        foreach (Node node in transitions)
+        {
+            sumOfProb += node.value;
+        }
+        return sumOfProb;
     }
 
     private bool CheckStochasticTransitionFireCondition(Node transition)
@@ -158,36 +174,39 @@ public class GraphManager : MonoBehaviour
 
     public void FirePetriNetTransition(Transition transition)
     {
-        Debug.Log("Firing " + transition.transform.name);
-
-        int[] m = new int[stateCount];
-        int[] star_t = new int[stateCount];
-        int[] t_star = new int[stateCount];
-
-        GetValuesForSimulation(transition, ref m, ref star_t, ref t_star);
-        if (initialStates.Count == 0)
-            initialStates = new List<int>(m);
-
-        string mString = string.Join(", ", m);
-        string star_tString = string.Join(", ", star_t);
-        string t_starString = string.Join(", ", t_star);
-
-        //Debug.Log($"m: {mString}, *t: {star_tString}, t*: {t_starString}");
-
-        if (TestStateMovingCondition(star_t, m) == false)
+        lock (_lock)
         {
-            //Debug.LogError("Can't fire " + transition.transform.name);
-            return;
+            Debug.Log("Firing " + transition.transform.name);
+
+            int[] m = new int[stateCount];
+            int[] star_t = new int[stateCount];
+            int[] t_star = new int[stateCount];
+
+            GetValuesForSimulation(transition, ref m, ref star_t, ref t_star);
+            if (initialStates.Count == 0)
+                initialStates = new List<int>(m);
+
+            string mString = string.Join(", ", m);
+            string star_tString = string.Join(", ", star_t);
+            string t_starString = string.Join(", ", t_star);
+
+            //Debug.Log($"m: {mString}, *t: {star_tString}, t*: {t_starString}");
+
+            if (TestStateMovingCondition(star_t, m) == false)
+            {
+                //Debug.LogError("Can't fire " + transition.transform.name);
+                return;
+            }
+
+            //SetTransitionFireColor(transition);
+            transition.SetFiringColor();
+
+            int[] m_prime = GetNewStates(m, star_t, t_star);
+            string m_primeString = string.Join(", ", m_prime);
+            //Debug.Log($"New state: {m_primeString}");
+
+            SetNewStates(m_prime);
         }
-
-        //SetTransitionFireColor(transition);
-        transition.SetFiringColor();
-
-        int[] m_prime = GetNewStates(m, star_t, t_star);
-        string m_primeString = string.Join(", ", m_prime);
-        //Debug.Log($"New state: {m_primeString}");
-
-        SetNewStates(m_prime);
     }
 
     private void GetValuesForSimulation(Transition transition, ref int[] m, ref int[] star_t, ref int[] t_star)

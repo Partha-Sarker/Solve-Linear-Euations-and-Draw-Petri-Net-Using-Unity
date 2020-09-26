@@ -54,11 +54,15 @@ public class UIManager : MonoBehaviour
             return;
 
         camController.canZoom = false;
+        if (logScreenEnabled)
+            graphManager.enableGraph = false;
     }
 
     public void OnLogPanelMouseExit() 
     {
         camController.canZoom = true;
+        if (logScreenEnabled)
+            graphManager.enableGraph = true;
     }
 
     public void ToggleLogScreenVisibility()

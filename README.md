@@ -11,8 +11,8 @@
 - Press ctrl+shift+space to simulate stochastic.
 - Press ctrl+shift+r to clear everything.
 - Press ctrl+shift+x to exit the application.
-- Press alt+[0-9] to save petri-net.
-- Press alt+shift+[0-9] to load petri-net.
+- Press alt+shift+[0-9] to save petri-net.
+- Press alt+[0-9] to load petri-net.
 - Use arrows to move camera left-right, up-down.
 - Scroll mouse wheel to adjust camera zoom.
 - Hold right-mouse-button to drag the camera.

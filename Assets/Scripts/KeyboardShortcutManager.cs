@@ -95,11 +95,11 @@ public class KeyboardShortcutManager : MonoBehaviour
         {
             for(int i=0; i<10; i++)
             {
-                if (Input.GetKeyDown("" + i) && altDown && !shiftDown)
+                if (Input.GetKeyDown("" + i) && altDown && shiftDown)
                 {
                     graphManager.SaveGraph(i);
                 }
-                else if(Input.GetKeyDown("" + i) && altDown && shiftDown)
+                else if(Input.GetKeyDown("" + i) && altDown && !shiftDown)
                 {
                     graphManager.LoadGraph(i);
                 }

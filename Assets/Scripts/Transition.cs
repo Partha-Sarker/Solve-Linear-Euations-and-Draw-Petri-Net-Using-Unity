@@ -5,18 +5,22 @@ using UnityEngine;
 public class Transition : Node
 {
     public SpriteRenderer spriteRenderer;
-    public Color fireColor;
-    public Color defaultColor;
+    public TransitionColor transitionColor;
     public float resetDelay = 1;
+
+    private void Start()
+    {
+        spriteRenderer.color = transitionColor.defaultColor;
+    }
 
     public void SetFiringColor()
     {
-        spriteRenderer.color = fireColor;
+        spriteRenderer.color = transitionColor.activeColor;
         Invoke("ResetColor", resetDelay);
     }
 
     private void ResetColor()
     {
-        spriteRenderer.color = defaultColor;
+        spriteRenderer.color = transitionColor.defaultColor;
     }
 }

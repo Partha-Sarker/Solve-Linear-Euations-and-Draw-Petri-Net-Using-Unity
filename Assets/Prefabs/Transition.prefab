@@ -129,8 +129,7 @@ MonoBehaviour:
   valueText: {fileID: 5553089479149716470}
   position: 0
   spriteRenderer: {fileID: 2717307261416209072}
-  fireColor: {r: 1, g: 0.514151, b: 0.514151, a: 1}
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  transitionColor: {fileID: 11400000, guid: 41f49f0afd443de4ba1f9810160693a0, type: 2}
   resetDelay: 1
 --- !u!1 &5553089479149716468
 GameObject:
