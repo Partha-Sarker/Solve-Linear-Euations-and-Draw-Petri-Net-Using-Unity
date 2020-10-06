@@ -45,24 +45,32 @@ public class KeyboardShortcutManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.D) && ctrlDown && !shiftDown)
         {
-            Debug.Log("Delete mode activated");
+            string logText = "Delete mode activated";
+            uiManager.AddLog(logText);
+            Debug.Log(logText);
             graphManager.currentMode = graphModes.GetComponent<DeleteMode>();
         }
         else if (Input.GetKeyDown(KeyCode.E) && !ctrlDown && !shiftDown)
         {
-            Debug.Log("Add edge mode activated");
+            string logText = "Add edge mode activated";
+            Debug.Log(logText);
+            uiManager.AddLog(logText);
             AddEdgeMode addEdgeMode = graphModes.GetComponent<AddEdgeMode>();
             addEdgeMode.prevNode = null;
             graphManager.currentMode = addEdgeMode;
         }
         else if (Input.GetKeyDown(KeyCode.E) && ctrlDown && !shiftDown)
         {
-            Debug.Log("Edit mode activated");
+            string logText = "Edit mode activated";
+            Debug.Log(logText);
+            uiManager.AddLog(logText);
             graphManager.currentMode = graphModes.GetComponent<InputMode>();
         }
         else if (Input.GetKeyDown(KeyCode.F) && ctrlDown && !shiftDown)
         {
-            Debug.Log("Firing mode activate");
+            string logText = "Firing mode activate";
+            Debug.Log(logText);
+            uiManager.AddLog(logText);
             graphManager.currentMode = graphModes.GetComponent<FiringMode>();
         }
         else if (Input.GetKeyDown(KeyCode.R) && ctrlDown && !shiftDown)
@@ -79,12 +87,16 @@ public class KeyboardShortcutManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.T) && !ctrlDown && !shiftDown)
         {
-            Debug.Log("Add transition mode activated");
+            string logText = "Add transition mode activated";
+            Debug.Log(logText);
+            uiManager.AddLog(logText);
             graphManager.currentMode = graphModes.GetComponent<AddTransitionMode>();
         }
         else if(Input.GetKeyDown(KeyCode.X) && ctrlDown && shiftDown)
         {
-            Debug.Log("Exiting application");
+            string logText = "Exiting application";
+            Debug.Log(logText);
+            uiManager.AddLog(logText);
             Application.Quit();
         }
         else if (Input.GetKeyDown(KeyCode.Space) && ctrlDown && shiftDown)
@@ -123,7 +135,9 @@ public class KeyboardShortcutManager : MonoBehaviour
 
     public void ResetGraphStates()
     {
-        Debug.Log("Resetting states");
+        string logText = "Resetting states";
+        Debug.Log(logText);
+        uiManager.AddLog(logText);
         graphManager.ResetStates();
     }
 

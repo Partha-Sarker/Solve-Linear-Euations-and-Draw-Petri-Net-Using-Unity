@@ -95,7 +95,9 @@ public class GraphManager : MonoBehaviour
                     return false;
                 }
                 isSimulating = true;
-                Debug.Log("Simulation Started");
+                string logText = "Simulation Started";
+                Debug.Log(logText);
+                uiManager.AddLog(logText);
                 StartCoroutine(StartStochasticSimulation(node));
             }
         }
