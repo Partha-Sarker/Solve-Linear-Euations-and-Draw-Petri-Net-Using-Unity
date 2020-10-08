@@ -385,22 +385,26 @@ public class GraphManager : MonoBehaviour
     {
         if(nodes.Count == 0)
         {
-            Debug.LogError("Nothing to save");
+            string log = "Nothing to save";
+            uiManager.AddLog(log);
+            Debug.LogError(log);
             return;
         }
         Refresh();
         PetriNet petriNet = new PetriNet(nodes, edges);
         string jsonString = JsonUtility.ToJson(petriNet);
         Debug.Log(jsonString);
-        string path = Application.dataPath + $"/Data/{index}.json";
+        string path = Application.persistentDataPath + $"graph_{index}.json";
         File.WriteAllText(path, jsonString);
         //LoadGraph(0);
-        Debug.Log("Petri net saved on slot " + index);
+        string logText = "Petri net saved on slot " + index;
+        uiManager.AddLog(logText);
+        Debug.Log(logText);
     }
 
     public void LoadGraph(int index)
     {
-        string path = Application.dataPath + $"/Data/{index}.json";
+        string path = Application.persistentDataPath + $"graph_{index}.json";
         string jsonString = "";
         try
         {
@@ -410,9 +414,14 @@ public class GraphManager : MonoBehaviour
 
         if(jsonString == "")
         {
-            Debug.LogError($"slot {index} is empty");
+            string log = $"slot {index} is empty";
+            uiManager.AddLog(log);
+            Debug.LogError(log);
             return;
         }
+
+        if (isSimulating)
+            Simulate();
 
         ClearAll();
         PetriNet petriNet = JsonUtility.FromJson<PetriNet>(jsonString);
@@ -436,7 +445,9 @@ public class GraphManager : MonoBehaviour
             Node fromNode = FindNode(edgeInfo.fromNodeTag, edgeInfo.fromNodePosition);
             addEdgeMode.CreateEdge(fromNode, toNode).weight = edgeInfo.weight;
         }
-        Debug.Log($"Petri-net loaded from slot {index}");
+        string logText = $"Petri-net loaded from slot {index}";
+        uiManager.AddLog(logText);
+        Debug.Log(logText);
         Refresh();
     }
 

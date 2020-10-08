@@ -1,0 +1,1 @@
+{"nodeInfos":[{"value":0,"WorldPos":{"x":-7.420560836791992,"y":4.186916351318359,"z":0.0},"tag":"State"},{"value":0,"WorldPos":{"x":0.3177576959133148,"y":0.37383174896240237,"z":0.0},"tag":"Transition"}],"edgeInfos":[{"fromNodePosition":1,"toNodePosition":1,"fromNodeTag":"State","toNodeTag":"Transition","weight":1}]}
