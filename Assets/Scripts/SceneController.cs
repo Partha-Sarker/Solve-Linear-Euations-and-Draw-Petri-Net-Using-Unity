@@ -14,7 +14,7 @@ public class SceneController : MonoBehaviour
         Application.Quit();
     }
 
-    public void Back()
+    public void GoToMainMenu()
     {
         SceneManager.LoadScene(0);
     }

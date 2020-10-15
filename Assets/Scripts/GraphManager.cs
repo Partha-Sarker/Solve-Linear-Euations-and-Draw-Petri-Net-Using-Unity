@@ -14,12 +14,14 @@ public class GraphManager : MonoBehaviour
     public int stateCount = 0, transitionCount = 0;
     public bool isSimulating = false;
     public bool enableGraph = true;
+    private float transitionSpeed;
 
     private Object _lock = new Object();
 
     // Start is called before the first frame update
     void Start()
     {
+        transitionSpeed = PlayerPrefs.GetFloat("speed", 1);
         currentMode = graphModes.GetComponent<AddStateMode>();
         Refresh();
     }
@@ -42,6 +44,7 @@ public class GraphManager : MonoBehaviour
         nodes.Add(node);
         Refresh();
     }
+
     public void RemoveNode(Node node)
     {
         List<Edge> edgeRemoveList = new List<Edge>();
@@ -125,7 +128,7 @@ public class GraphManager : MonoBehaviour
 
         float lambda = (float)GetSumOfProbability(connectedTransitions);
         float randomNum = Random.Range(0f, 1f);
-        float waitingTime = -(1 / lambda) * Mathf.Log(1 - randomNum);
+        float waitingTime = -(1 / lambda) * Mathf.Log(1 - randomNum) * transitionSpeed;
 
         uiManager.AddLog($"Waiting time for {selectedTransition.transform.name} is {waitingTime}");
 

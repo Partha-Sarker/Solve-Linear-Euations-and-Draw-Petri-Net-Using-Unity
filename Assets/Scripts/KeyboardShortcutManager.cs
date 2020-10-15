@@ -25,7 +25,7 @@ public class KeyboardShortcutManager : MonoBehaviour
             return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
-            sceneController.Back();
+            sceneController.GoToMainMenu();
 
         if (Input.GetKeyDown(KeyCode.LeftAlt))
             altDown = true;
