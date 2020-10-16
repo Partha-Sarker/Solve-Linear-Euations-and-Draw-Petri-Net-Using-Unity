@@ -14,11 +14,12 @@ public class GraphManager : MonoBehaviour
     public int stateCount = 0, transitionCount = 0;
     public bool isSimulating = false;
     public bool enableGraph = true;
+    public bool fileBrowserOpen = false;
     private float transitionSpeed;
 
     private Object _lock = new Object();
 
-    // Start is called before the first frame update
+
     void Start()
     {
         transitionSpeed = PlayerPrefs.GetFloat("speed", 1);
@@ -26,10 +27,11 @@ public class GraphManager : MonoBehaviour
         Refresh();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!enableGraph)
+            return;
+        if (fileBrowserOpen)
             return;
 
         if (Input.GetMouseButtonUp(0))
@@ -37,6 +39,7 @@ public class GraphManager : MonoBehaviour
             currentMode.OnClick();
         }
     }
+
 
     public void AddNode(Node node)
 
@@ -330,7 +333,7 @@ public class GraphManager : MonoBehaviour
 
     public void ClearAll()
     {
-        foreach(Node node in nodes)
+        foreach (Node node in nodes)
         {
             Destroy(node.gameObject);
         }
@@ -340,8 +343,10 @@ public class GraphManager : MonoBehaviour
             Destroy(edge.gameObject);
         }
         edges.Clear();
-        Debug.Log("Petri net cleared");
         Refresh();
+        string logText = "Petri net cleared";
+        Debug.Log(logText);
+        uiManager.AddLog(logText);
     }
 
     private Edge GetEdge(Node toNode, Node fromNode)
@@ -384,7 +389,7 @@ public class GraphManager : MonoBehaviour
         return nodes;
     }
 
-    public void SaveGraph(int index)
+    public void SaveGraph(string path)
     {
         if(nodes.Count == 0)
         {
@@ -397,17 +402,15 @@ public class GraphManager : MonoBehaviour
         PetriNet petriNet = new PetriNet(nodes, edges);
         string jsonString = JsonUtility.ToJson(petriNet);
         Debug.Log(jsonString);
-        string path = Application.persistentDataPath + $"graph_{index}.json";
         File.WriteAllText(path, jsonString);
         //LoadGraph(0);
-        string logText = "Petri net saved on slot " + index;
+        string logText = "Petri net saved to " + path;
         uiManager.AddLog(logText);
         Debug.Log(logText);
     }
 
-    public void LoadGraph(int index)
+    public void LoadGraph(string path)
     {
-        string path = Application.persistentDataPath + $"graph_{index}.json";
         string jsonString = "";
         try
         {
@@ -417,7 +420,7 @@ public class GraphManager : MonoBehaviour
 
         if(jsonString == "")
         {
-            string log = $"slot {index} is empty";
+            string log = $"{path} is empty";
             uiManager.AddLog(log);
             Debug.LogError(log);
             return;
@@ -448,7 +451,7 @@ public class GraphManager : MonoBehaviour
             Node fromNode = FindNode(edgeInfo.fromNodeTag, edgeInfo.fromNodePosition);
             addEdgeMode.CreateEdge(fromNode, toNode).weight = edgeInfo.weight;
         }
-        string logText = $"Petri-net loaded from slot {index}";
+        string logText = $"Petri-net loaded from {path}";
         uiManager.AddLog(logText);
         Debug.Log(logText);
         Refresh();

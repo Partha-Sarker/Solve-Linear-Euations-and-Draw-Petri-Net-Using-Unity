@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using SimpleFileBrowser;
+using System.Collections;
+using System;
 
 public class KeyboardShortcutManager : MonoBehaviour
 {
@@ -9,16 +12,9 @@ public class KeyboardShortcutManager : MonoBehaviour
 
     public CameraController camController;
     public bool enableShortcut = true;
-    private bool ctrlDown = false, shiftDown = false, altDown;
+    private bool ctrlDown = false, shiftDown = false;
     private Vector2 moveInput;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (!enableShortcut)
@@ -27,10 +23,10 @@ public class KeyboardShortcutManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
             sceneController.GoToMainMenu();
 
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
-            altDown = true;
-        else if (Input.GetKeyUp(KeyCode.LeftAlt))
-            altDown = false;
+        //if (Input.GetKeyDown(KeyCode.LeftAlt))
+        //    altDown = true;
+        //else if (Input.GetKeyUp(KeyCode.LeftAlt))
+        //    altDown = false;
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
             ctrlDown = true;
@@ -73,17 +69,25 @@ public class KeyboardShortcutManager : MonoBehaviour
             uiManager.AddLog(logText);
             graphManager.currentMode = graphModes.GetComponent<FiringMode>();
         }
+        else if (Input.GetKeyDown(KeyCode.L) && ctrlDown)
+        {
+            StartCoroutine(ShowLoadDialogCoroutine());
+        }
         else if (Input.GetKeyDown(KeyCode.R) && ctrlDown && !shiftDown)
         {
             ResetGraphStates();
         }
         else if (Input.GetKeyDown(KeyCode.R) && ctrlDown && shiftDown)
         {
-            ClearAll();
+            graphManager.ClearAll();
         }
         else if (Input.GetKeyDown(KeyCode.S) && !ctrlDown && !shiftDown)
         {
             ActivateAddStateMode();
+        }
+        else if (Input.GetKeyDown(KeyCode.S) && ctrlDown)
+        {
+            StartCoroutine(ShowSaveDialogCoroutine());
         }
         else if (Input.GetKeyDown(KeyCode.T) && !ctrlDown && !shiftDown)
         {
@@ -103,26 +107,102 @@ public class KeyboardShortcutManager : MonoBehaviour
         {
             SimulateGraph();
         }
-        else
-        {
-            for(int i=0; i<10; i++)
-            {
-                if (Input.GetKeyDown("" + i) && altDown && shiftDown)
-                {
-                    graphManager.SaveGraph(i);
-                }
-                else if(Input.GetKeyDown("" + i) && altDown && !shiftDown)
-                {
-                    graphManager.LoadGraph(i);
-                }
-            }
-        }
-
+        //else
+        //{
+        //    for(int i=0; i<10; i++)
+        //    {
+        //        if (Input.GetKeyDown("" + i) && altDown && shiftDown)
+        //        {
+        //            graphManager.SaveGraph(i);
+        //        }
+        //        else if(Input.GetKeyDown("" + i) && altDown && !shiftDown)
+        //        {
+        //            graphManager.LoadGraph(i);
+        //        }
+        //    }
+        //}
 
 
         GetMovementInput();
 
         camController.MoveCamera(moveInput);
+    }
+
+
+    public void SavePetriNet()
+    {
+        StartCoroutine(ShowSaveDialogCoroutine());
+    }
+
+    public void LoadPetriNet()
+    {
+        StartCoroutine(ShowLoadDialogCoroutine());
+    }
+
+    IEnumerator ShowLoadDialogCoroutine()
+    {
+        camController.canZoom = false;
+        enableShortcut = false;
+        graphManager.fileBrowserOpen = true;
+        FileBrowser.SetFilters(false, new FileBrowser.Filter("Graph", ".json"));
+        //FileBrowser.AddQuickLink("File Browser", "C:\\", null);
+        // Show a load file dialog and wait for a response from user
+        // Load file/folder: file, Allow multiple selection: true
+        // Initial path: default (Documents), Title: "Load File", submit button text: "Load"
+        yield return FileBrowser.WaitForLoadDialog(false, true, "C:\\", "Load File", "Load");
+
+        // Dialog is closed
+        // Print whether the user has selected some files/folders or cancelled the operation (FileBrowser.Success)
+        Debug.Log(FileBrowser.Success);
+
+        if (FileBrowser.Success)
+        {
+            string path = FileBrowser.Result[0];
+            Debug.Log(path);
+            try
+            {
+                graphManager.LoadGraph(path);
+            }
+            catch (Exception)
+            {
+                string log = $"Can't load graph from {path}";
+                Debug.LogWarning(log);
+                uiManager.AddLog(log);
+            }
+        }
+        graphManager.fileBrowserOpen = false;
+        enableShortcut = true;
+        camController.canZoom = true;
+    }
+
+    IEnumerator ShowSaveDialogCoroutine()
+    {
+        camController.canZoom = false;
+        enableShortcut = false;
+        graphManager.fileBrowserOpen = true;
+        FileBrowser.SetFilters(false, new FileBrowser.Filter("Graph", ".json"));
+
+        yield return FileBrowser.WaitForSaveDialog(false, true, "C:\\", "Save Graph", "Save");
+        Debug.Log(FileBrowser.Success);
+
+        if (FileBrowser.Success)
+        {
+            string path = FileBrowser.Result[0];
+            Debug.Log(path);
+            try
+            {
+                graphManager.SaveGraph(path);
+            }
+            catch (Exception)
+            {
+                string log = $"Can't save graph to {path}";
+                Debug.LogWarning(log);
+                uiManager.AddLog(log);
+            }
+        }
+        graphManager.fileBrowserOpen = false;
+        enableShortcut = true;
+        camController.canZoom = true;
     }
 
     public void ActivateAddStateMode()
@@ -148,15 +228,6 @@ public class KeyboardShortcutManager : MonoBehaviour
             uiManager.SetStopUI();
         else
             uiManager.SetPlayUI();
-    }
-
-    public void ClearAll()
-    {
-        string logText = "Clearing petri net";
-        Debug.Log(logText);
-        uiManager.AddLog(logText);
-        graphManager.ClearAll();
-
     }
 
     private void GetMovementInput()

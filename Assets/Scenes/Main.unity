@@ -2261,7 +2261,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &1379297778825233421
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2476,26 +2476,25 @@ PrefabInstance:
         - Press ctrl+shift+x to exit the application.
 
         -
-        Press alt+shift+[0-9] to save petri-net.
+        Press ctrl+s to save petri-net.
 
-        - Press alt+[0-9] to load
-        petri-net.
-
-        - Use arrows to move camera left-right, up-down.
+        - Press ctrl+l to load petri-net.
 
         -
-        Scroll mouse wheel to adjust camera zoom.
+        Use arrows to move camera left-right, up-down.
 
-        - Hold right-mouse-button
-        to drag the camera.
+        - Scroll mouse wheel
+        to adjust camera zoom.
 
-        - Hold right-mouse-button and scroll mouse wheel
-        to adjust camera drag speed.'
+        - Hold right-mouse-button to drag the camera.
+
+        -
+        Hold right-mouse-button and scroll mouse wheel to adjust camera drag speed.'
       objectReference: {fileID: 0}
     - target: {fileID: 3634987423048624956, guid: 73ec086c597255548816a0e1fb2a12fe,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 810
+      value: 799
       objectReference: {fileID: 0}
     - target: {fileID: 3634987423048624956, guid: 73ec086c597255548816a0e1fb2a12fe,
         type: 3}
@@ -2510,7 +2509,7 @@ PrefabInstance:
     - target: {fileID: 3634987423048624956, guid: 73ec086c597255548816a0e1fb2a12fe,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 153
+      value: 152
       objectReference: {fileID: 0}
     - target: {fileID: 3634987423048624956, guid: 73ec086c597255548816a0e1fb2a12fe,
         type: 3}
