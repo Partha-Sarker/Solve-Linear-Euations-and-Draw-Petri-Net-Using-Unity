@@ -13,8 +13,7 @@ public class GraphManager : MonoBehaviour
     public List<int> initialStates;
     public int stateCount = 0, transitionCount = 0;
     public bool isSimulating = false;
-    public bool enableGraph = true;
-    public bool fileBrowserOpen = false;
+    public int pendingStuffs = 0;
     private float transitionSpeed;
 
     private Object _lock = new Object();
@@ -22,16 +21,13 @@ public class GraphManager : MonoBehaviour
 
     void Start()
     {
-        transitionSpeed = PlayerPrefs.GetFloat("speed", 1);
         currentMode = graphModes.GetComponent<AddStateMode>();
         Refresh();
     }
 
     void Update()
     {
-        if (!enableGraph)
-            return;
-        if (fileBrowserOpen)
+        if (pendingStuffs > 0)
             return;
 
         if (Input.GetMouseButtonUp(0))
@@ -102,6 +98,7 @@ public class GraphManager : MonoBehaviour
                 }
                 isSimulating = true;
                 string logText = "Simulation Started";
+                transitionSpeed = PlayerPrefs.GetFloat("speed", 1);
                 Debug.Log(logText);
                 uiManager.AddLog(logText);
                 StartCoroutine(StartStochasticSimulation(node));
@@ -133,7 +130,7 @@ public class GraphManager : MonoBehaviour
         float randomNum = Random.Range(0f, 1f);
         float waitingTime = -(1 / lambda) * Mathf.Log(1 - randomNum) * transitionSpeed;
 
-        uiManager.AddLog($"Waiting time for {selectedTransition.transform.name} is {waitingTime}");
+        uiManager.AddLog($"Waiting time for {selectedTransition.transform.name} is {waitingTime} Sec");
 
         if (CheckStochasticTransitionFireCondition(selectedTransition))
         {

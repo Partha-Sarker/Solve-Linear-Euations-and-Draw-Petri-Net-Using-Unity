@@ -2446,45 +2446,43 @@ PrefabInstance:
       propertyPath: m_text
       value: 'Keyboard Shortcuts
 
-        - Press escape to go back.
-
-        - Press
-        s and click to create state.
-
-        - Press t and click to create transition.
+        - Press s and click to create state.
 
         -
-        Press e and click 2 states to create an edge between them.
+        Press t and click to create transition.
 
-        - Press
-        ctrl+d and click any node or edge to delete them.
+        - Press e and click 2 states
+        to create an edge between them.
 
-        - Press ctrl+e
-        and click to edit weight or token value.
+        - Press ctrl+d and click any node
+        or edge to delete them.
 
-        - Press ctrl+f and click
-        to fire transition.
+        - Press ctrl+e and click to edit weight
+        or token value.
 
-        - Press ctrl+r to reset states.
-
-        - Press
-        ctrl+shift+space to simulate stochastic.
-
-        - Press ctrl+shift+r to
-        clear everything.
-
-        - Press ctrl+shift+x to exit the application.
+        - Press ctrl+f and click to fire transition.
 
         -
-        Press ctrl+s to save petri-net.
+        Press ctrl+r to reset states.
+
+        - Press ctrl+shift+space to simulate
+        stochastic.
+
+        - Press ctrl+shift+r to clear everything.
+
+        -
+        Press ctrl+shift+x to exit the application.
+
+        - Press ctrl+s to save
+        petri-net.
 
         - Press ctrl+l to load petri-net.
 
-        -
-        Use arrows to move camera left-right, up-down.
+        - Use arrows
+        to move camera left-right, up-down.
 
-        - Scroll mouse wheel
-        to adjust camera zoom.
+        - Scroll mouse wheel to adjust
+        camera zoom.
 
         - Hold right-mouse-button to drag the camera.
 

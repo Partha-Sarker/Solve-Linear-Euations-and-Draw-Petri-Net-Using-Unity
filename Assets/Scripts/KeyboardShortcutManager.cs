@@ -20,8 +20,8 @@ public class KeyboardShortcutManager : MonoBehaviour
         if (!enableShortcut)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            sceneController.GoToMainMenu();
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //    sceneController.GoToMainMenu();
 
         //if (Input.GetKeyDown(KeyCode.LeftAlt))
         //    altDown = true;
@@ -143,7 +143,8 @@ public class KeyboardShortcutManager : MonoBehaviour
     {
         camController.canZoom = false;
         enableShortcut = false;
-        graphManager.fileBrowserOpen = true;
+        graphManager.pendingStuffs++;
+
         FileBrowser.SetFilters(false, new FileBrowser.Filter("Graph", ".json"));
         //FileBrowser.AddQuickLink("File Browser", "C:\\", null);
         // Show a load file dialog and wait for a response from user
@@ -170,7 +171,8 @@ public class KeyboardShortcutManager : MonoBehaviour
                 uiManager.AddLog(log);
             }
         }
-        graphManager.fileBrowserOpen = false;
+
+        graphManager.pendingStuffs--;
         enableShortcut = true;
         camController.canZoom = true;
     }
@@ -179,7 +181,7 @@ public class KeyboardShortcutManager : MonoBehaviour
     {
         camController.canZoom = false;
         enableShortcut = false;
-        graphManager.fileBrowserOpen = true;
+        graphManager.pendingStuffs++;
         FileBrowser.SetFilters(false, new FileBrowser.Filter("Graph", ".json"));
 
         yield return FileBrowser.WaitForSaveDialog(false, true, "C:\\", "Save Graph", "Save");
@@ -200,7 +202,7 @@ public class KeyboardShortcutManager : MonoBehaviour
                 uiManager.AddLog(log);
             }
         }
-        graphManager.fileBrowserOpen = false;
+        graphManager.pendingStuffs--;
         enableShortcut = true;
         camController.canZoom = true;
     }

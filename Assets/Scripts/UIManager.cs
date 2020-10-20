@@ -10,12 +10,20 @@ public class UIManager : MonoBehaviour
     public CanvasGroup logCanvasGroup;
     public Image logImage;
     public GraphManager graphManager;
+    public KeyboardShortcutManager shortcutManager;
     public CameraController camController;
+    public TMP_InputField speedInput;
     public Sprite play, pause, stop;
     public Button playButton;
     public RectTransform logParent;
     public GameObject log;
     public bool logScreenEnabled = false;
+
+    private void Start()
+    {
+        float speed = PlayerPrefs.GetFloat("speed", 1);
+        speedInput.text = speed.ToString();
+    }
 
     public void SetPlayUI()
     {
@@ -40,12 +48,12 @@ public class UIManager : MonoBehaviour
 
     public void OnBottomPanelMouseEnter()
     {
-        graphManager.enableGraph = false;        
+        graphManager.pendingStuffs++;        
     }
 
     public void OnBottomPanelMouseExit()
     {
-        graphManager.enableGraph = true;
+        graphManager.pendingStuffs--;
     }
 
     public void OnLogPanelMouseEnter() 
@@ -55,14 +63,40 @@ public class UIManager : MonoBehaviour
 
         camController.canZoom = false;
         if (logScreenEnabled)
-            graphManager.enableGraph = false;
+            graphManager.pendingStuffs++;
     }
 
     public void OnLogPanelMouseExit() 
     {
         camController.canZoom = true;
         if (logScreenEnabled)
-            graphManager.enableGraph = true;
+            graphManager.pendingStuffs--;
+    }
+
+    public void OnSpeedInputSelect()
+    {
+        Debug.Log("Speed input select");
+        graphManager.pendingStuffs++;
+        shortcutManager.enableShortcut = false;
+    }
+
+    public void OnSpeedInputEndEdit()
+    {
+        Debug.Log("Speed input end edit");
+
+        string speedString = speedInput.text;
+        if (speedString == null || speedString == "" || speedString == "-" || speedString == "0" || speedString == "-0")
+        {
+            speedString = "1";
+        }
+        float speed = float.Parse(speedString);
+        if (speed < 0) speed *= -1;
+        PlayerPrefs.SetFloat("speed", speed);
+        PlayerPrefs.Save();
+        speedInput.text = speed.ToString();
+
+        graphManager.pendingStuffs--;
+        shortcutManager.enableShortcut = true;
     }
 
     public void ToggleLogScreenVisibility()
