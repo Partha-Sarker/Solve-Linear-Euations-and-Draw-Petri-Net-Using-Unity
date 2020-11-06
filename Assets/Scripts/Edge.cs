@@ -1,17 +1,26 @@
 ﻿using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.UI;
 
 public class Edge : MonoBehaviour, IEditable
 {
     //[HideInInspector]
     public Node fromNode, toNode;
     public int weight = 1;
+    public float offset = 2;
     public LineRenderer line;
     public BoxCollider2D col;
     public TMP_InputField inputField;
     public TextMeshProUGUI weightText;
     public RectTransform inputCanvas;
+    public GraphManager graphManager;
+
+
+    private void Start()
+    {
+        graphManager = FindObjectOfType<GraphManager>();
+    }
 
     public void DestroySelf()
     {
@@ -64,5 +73,21 @@ public class Edge : MonoBehaviour, IEditable
         transform.eulerAngles = new Vector3(0, 0, angle) * Mathf.Rad2Deg;
 
         inputCanvas.rotation = Quaternion.identity;
+    }
+
+    public void MoveRight()
+    {
+        Vector2 startPos = fromNode.transform.position;
+        Vector2 endPos = toNode.transform.position;
+        Vector3 midPos = (startPos + endPos) / 2;
+
+        midPos += transform.up * offset;
+        startPos += (Vector2)transform.up * offset;
+        endPos += (Vector2)transform.up * offset;
+        midPos.z = 10;
+
+        line.SetPosition(0, startPos);
+        line.SetPosition(1, endPos);
+        transform.position = midPos;
     }
 }

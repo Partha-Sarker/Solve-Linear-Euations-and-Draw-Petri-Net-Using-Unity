@@ -63,9 +63,9 @@ public class GraphManager : MonoBehaviour
     public void AddEdge(Edge edge)
     {
         // check if edge exists between this nodes
-        Edge reverseEdge = GetEdge(edge.fromNode, edge.toNode);
-        if (reverseEdge != null)
-            RemoveEdge(reverseEdge);
+        Edge sameEdge = GetEdge(edge.toNode, edge.fromNode);
+        if (sameEdge != null)
+            RemoveEdge(sameEdge);
         edges.Add(edge);
         Refresh();
     }
@@ -295,7 +295,7 @@ public class GraphManager : MonoBehaviour
         }
     }
 
-    private void Refresh()
+    public void Refresh()
     {
         stateCount = 0; transitionCount = 0;
         foreach(Node node in nodes)
@@ -323,8 +323,10 @@ public class GraphManager : MonoBehaviour
         {
             int count = i + 1;
             string title = "Edge" + count;
-            edges[i].gameObject.name = title;
-            edges[i].SetWeightText();
+            Edge edge = edges[i];
+            edge.gameObject.name = title;
+            edge.SetWeightText();
+            edge.MoveRight();
         }
     }
 
@@ -346,14 +348,14 @@ public class GraphManager : MonoBehaviour
         uiManager.AddLog(logText);
     }
 
-    private Edge GetEdge(Node toNode, Node fromNode)
+    public Edge GetEdge(Node toNode, Node fromNode)
     {
         foreach(Edge edge in edges)
         {
             if (edge.toNode == toNode && edge.fromNode == fromNode)
                 return edge;
-            else if (edge.fromNode == toNode && edge.toNode == fromNode)
-                return edge;
+            //else if (edge.fromNode == toNode && edge.toNode == fromNode)
+            //    return edge;
         }
         return null;
     }

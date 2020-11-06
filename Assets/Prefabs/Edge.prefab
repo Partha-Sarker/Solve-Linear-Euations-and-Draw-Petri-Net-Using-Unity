@@ -431,11 +431,13 @@ MonoBehaviour:
   fromNode: {fileID: 0}
   toNode: {fileID: 0}
   weight: 1
+  offset: 0.4
   line: {fileID: 5946024041961161621}
   col: {fileID: 8199376708369902481}
   inputField: {fileID: 7468956952296024969}
   weightText: {fileID: 4010917062567669568}
   inputCanvas: {fileID: 3981356740364010482}
+  graphManager: {fileID: 0}
 --- !u!1 &4607525193213612098
 GameObject:
   m_ObjectHideFlags: 0
