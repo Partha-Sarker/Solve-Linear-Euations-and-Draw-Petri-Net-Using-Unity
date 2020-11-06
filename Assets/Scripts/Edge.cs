@@ -90,4 +90,17 @@ public class Edge : MonoBehaviour, IEditable
         line.SetPosition(1, endPos);
         transform.position = midPos;
     }
+
+    public void SetDefaultPos()
+    {
+        Vector2 startPos = fromNode.transform.position;
+        Vector2 endPos = toNode.transform.position;
+        Vector3 midPos = (startPos + endPos) / 2;
+
+        midPos.z = 10;
+
+        line.SetPosition(0, startPos);
+        line.SetPosition(1, endPos);
+        transform.position = midPos;
+    }
 }

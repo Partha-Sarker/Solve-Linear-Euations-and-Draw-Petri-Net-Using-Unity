@@ -326,7 +326,10 @@ public class GraphManager : MonoBehaviour
             Edge edge = edges[i];
             edge.gameObject.name = title;
             edge.SetWeightText();
-            edge.MoveRight();
+            if (GetEdge(edge.fromNode, edge.toNode) != null)
+                edge.MoveRight();
+            else
+                edge.SetDefaultPos();
         }
     }
 
