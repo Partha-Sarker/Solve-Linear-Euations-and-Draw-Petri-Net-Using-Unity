@@ -263,6 +263,7 @@ MonoBehaviour:
   graphManager: {fileID: 1643280253}
   edgeGameObject: {fileID: 4303653036277783067, guid: cc901540ffeeffd4dae1e3b3bed939f2,
     type: 3}
+  uiManager: {fileID: 161487387}
   prevNode: {fileID: 0}
 --- !u!114 &158495606
 MonoBehaviour:

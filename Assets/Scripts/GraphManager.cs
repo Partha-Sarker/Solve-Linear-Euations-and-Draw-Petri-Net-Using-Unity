@@ -116,11 +116,12 @@ public class GraphManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         List<Node> connectedTransitions = GetOutgoingNodes(state);
-        Debug.Log($"{state.transform.name} is connected with:");
+        string connectedTransitionsName = "";
         foreach(Node connectedTransition in connectedTransitions)
         {
-            Debug.Log(connectedTransition.transform.name);
+            connectedTransitionsName += connectedTransition.transform.name + " ";
         }
+        Debug.Log($"{state.transform.name} is connected with: {connectedTransitionsName}");
 
         Node selectedTransition = SelectTransitionByProbability(connectedTransitions);
         if (selectedTransition == null)
@@ -181,7 +182,9 @@ public class GraphManager : MonoBehaviour
     {
         lock (_lock)
         {
-            Debug.Log("Firing " + transition.transform.name);
+            string logText = "Firing " + transition.transform.name;
+            uiManager.AddLog(logText);
+            Debug.Log(logText);
 
             int[] m = new int[stateCount];
             int[] star_t = new int[stateCount];
@@ -199,7 +202,9 @@ public class GraphManager : MonoBehaviour
 
             if (TestStateMovingCondition(star_t, m) == false)
             {
-                //Debug.LogError("Can't fire " + transition.transform.name);
+                logText = $"Can't fire {transition.transform.name}, doesn't meet firing condition(*t > m)";
+                Debug.LogError(logText);
+                uiManager.AddLog(logText);
                 return;
             }
 

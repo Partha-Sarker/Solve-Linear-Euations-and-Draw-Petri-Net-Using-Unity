@@ -4,6 +4,7 @@ public class AddEdgeMode : MonoBehaviour, IGraphMode
 {
     public GraphManager graphManager;
     public GameObject edgeGameObject;
+    public UIManager uiManager;
     [HideInInspector] public Node prevNode;
 
     public void OnClick()
@@ -24,12 +25,19 @@ public class AddEdgeMode : MonoBehaviour, IGraphMode
             if (prevNode == null && currentNode != null)
             {
                 prevNode = currentNode;
-                Debug.Log("Waiting for next node to create edge");
+                string logText = $"{currentNode.transform.name}is waiting for next node to create edge";
+                uiManager.AddLog(logText);
+                Debug.Log(logText);
             }
             else if (prevNode != null && prevNode != currentNode)
             {
-                if(!prevNode.CompareTag(currentNode.tag))
+                if (!prevNode.CompareTag(currentNode.tag))
+                {
+                    string logText = $"Edge has been created between {prevNode.transform.name} {currentNode.transform.name}";
+                    Debug.Log(logText);
+                    uiManager.AddLog(logText);
                     CreateEdge(prevNode, currentNode);
+                }
             }
 
             prevNode = currentNode;
