@@ -97,6 +97,10 @@ public class UIManager : MonoBehaviour
 
         graphManager.pendingStuffs--;
         shortcutManager.enableShortcut = true;
+
+        string logText = $"Current transition unit is {speed} sec";
+        AddLog(logText);
+        Debug.Log(logText);
     }
 
     public void ToggleLogScreenVisibility()

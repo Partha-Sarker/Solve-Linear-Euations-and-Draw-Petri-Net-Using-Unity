@@ -131,7 +131,7 @@ public class GraphManager : MonoBehaviour
         float randomNum = Random.Range(0f, 1f);
         float waitingTime = -(1 / lambda) * Mathf.Log(1 - randomNum) * transitionSpeed;
 
-        uiManager.AddLog($"Waiting time for {selectedTransition.transform.name} is {waitingTime} Sec");
+        uiManager.AddLog($"Waiting time for {selectedTransition.transform.name} is {waitingTime} Sec for random value {randomNum}");
 
         if (CheckStochasticTransitionFireCondition(selectedTransition))
         {

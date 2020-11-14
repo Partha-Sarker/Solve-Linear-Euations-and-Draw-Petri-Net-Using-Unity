@@ -55,6 +55,15 @@ public class KeyboardShortcutManager : MonoBehaviour
             addEdgeMode.prevNode = null;
             graphManager.currentMode = addEdgeMode;
         }
+        else if (Input.GetKeyDown(KeyCode.E) && !ctrlDown && shiftDown)
+        {
+            string logText = "Add double edge mode activated";
+            Debug.Log(logText);
+            uiManager.AddLog(logText);
+            AddDoubleEdgeMode addDoubleEdgeMode = graphModes.GetComponent<AddDoubleEdgeMode>();
+            addDoubleEdgeMode.prevNode = null;
+            graphManager.currentMode = addDoubleEdgeMode;
+        }
         else if (Input.GetKeyDown(KeyCode.E) && ctrlDown && !shiftDown)
         {
             string logText = "Edit mode activated";

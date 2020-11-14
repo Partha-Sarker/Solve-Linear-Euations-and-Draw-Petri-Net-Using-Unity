@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class AddEdgeMode : MonoBehaviour, IGraphMode
+public class AddDoubleEdgeMode : MonoBehaviour, IGraphMode
 {
     public GraphManager graphManager;
     public GameObject edgeGameObject;
@@ -33,10 +33,11 @@ public class AddEdgeMode : MonoBehaviour, IGraphMode
             {
                 if (!prevNode.CompareTag(currentNode.tag))
                 {
-                    string logText = $"Edge has been created from {prevNode.transform.name} to {currentNode.transform.name}";
+                    string logText = $"Edge has been created between {prevNode.transform.name} and {currentNode.transform.name}";
                     Debug.Log(logText);
                     uiManager.AddLog(logText);
                     CreateEdge(prevNode, currentNode);
+                    CreateEdge(currentNode, prevNode);
                 }
             }
 

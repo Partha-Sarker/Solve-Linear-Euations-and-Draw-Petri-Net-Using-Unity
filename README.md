@@ -2,7 +2,8 @@
 ## Keyboard Shortcuts
 - Press s and click to create state.
 - Press t and click to create transition.
-- Press e and click 2 states to create an edge between them.
+- Press e and click 2 nodes to create an edge between them.
+- Press shift+e and click 2 nodes to create edges in both side between them.
 - Press ctrl+d and click any node or edge to delete them.
 - Press ctrl+e and click to edit weight or token value.
 - Press ctrl+f and click to fire transition.
@@ -16,5 +17,3 @@
 - Scroll mouse wheel to adjust camera zoom.
 - Hold right-mouse-button to drag the camera.
 - Hold right-mouse-button and scroll mouse wheel to adjust camera drag speed.
-
-Press the log button to toggle the visibility of log screen.
