@@ -11,7 +11,7 @@ public class TestScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        TestMethod(20);
     }
 
     // Update is called once per frame
@@ -25,5 +25,10 @@ public class TestScript : MonoBehaviour
         midPos = m.position;
         midPos += (Vector2)m.up * offset;
         m.position = midPos;
+    }
+
+    public void TestMethod(int h = 10)
+    {
+
     }
 }

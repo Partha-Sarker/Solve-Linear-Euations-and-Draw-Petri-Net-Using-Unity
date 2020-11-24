@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
     public Button playButton;
     public RectTransform logParent;
     public GameObject log;
-    public bool logScreenEnabled = false;
+    public GameObject keyboardShortcut;
 
     private void Start()
     {
@@ -43,17 +43,20 @@ public class UIManager : MonoBehaviour
     public void AddLog(string logText)
     {
         GameObject newLog = Instantiate(log, logParent);
-        newLog.GetComponent<TextMeshProUGUI>().text = logText;
+        TextMeshProUGUI textMesh = newLog.GetComponent<TextMeshProUGUI>();
+        textMesh.text = logText;
+        textMesh.ForceMeshUpdate();
+        textMesh.autoSizeTextContainer = true;
     }
 
     public void OnBottomPanelMouseEnter()
     {
-        graphManager.pendingStuffs++;        
+        graphManager.IncrementPendingStuffs();        
     }
 
     public void OnBottomPanelMouseExit()
     {
-        graphManager.pendingStuffs--;
+        graphManager.DecrementPendingStuffs();
     }
 
     public void OnLogPanelMouseEnter() 
@@ -62,21 +65,21 @@ public class UIManager : MonoBehaviour
             return;
 
         camController.canZoom = false;
-        if (logScreenEnabled)
-            graphManager.pendingStuffs++;
+        if (log.activeSelf)
+            graphManager.IncrementPendingStuffs();
     }
 
     public void OnLogPanelMouseExit() 
     {
         camController.canZoom = true;
-        if (logScreenEnabled)
-            graphManager.pendingStuffs--;
+        if (log.activeSelf)
+            graphManager.DecrementPendingStuffs();
     }
 
     public void OnSpeedInputSelect()
     {
         Debug.Log("Speed input select");
-        graphManager.pendingStuffs++;
+        graphManager.IncrementPendingStuffs();
         shortcutManager.enableShortcut = false;
     }
 
@@ -95,7 +98,7 @@ public class UIManager : MonoBehaviour
         PlayerPrefs.Save();
         speedInput.text = speed.ToString();
 
-        graphManager.pendingStuffs--;
+        graphManager.DecrementPendingStuffs();
         shortcutManager.enableShortcut = true;
 
         string logText = $"Current transition unit is {speed} sec";
@@ -103,9 +106,23 @@ public class UIManager : MonoBehaviour
         Debug.Log(logText);
     }
 
+    public void ToggleKeyboardShortcut()
+    {
+        if (keyboardShortcut.activeSelf)
+        {
+            keyboardShortcut.SetActive(false);
+            graphManager.DecrementPendingStuffs();
+        }
+        else
+        {
+            keyboardShortcut.SetActive(true);
+            graphManager.IncrementPendingStuffs();
+        }
+    }
+
     public void ToggleLogScreenVisibility()
     {
-        if (logScreenEnabled)
+        if (log.activeSelf)
         {
             logCanvasGroup.alpha = .5f;
             logImage.color = logDisableColor;
@@ -115,6 +132,10 @@ public class UIManager : MonoBehaviour
             logCanvasGroup.alpha = 1;
             logImage.color = logEnableColor;
         }
-        logScreenEnabled = !logScreenEnabled;
+    }
+
+    public void ExitApplication()
+    {
+        Application.Quit();
     }
 }

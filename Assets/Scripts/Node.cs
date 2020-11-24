@@ -4,7 +4,6 @@ using TMPro;
 
 public class Node : MonoBehaviour, IEditable
 {
-    [HideInInspector]
     public int value;
     [HideInInspector]
     public TextMeshProUGUI titleText;

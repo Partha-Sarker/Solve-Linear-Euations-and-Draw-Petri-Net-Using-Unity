@@ -13,7 +13,7 @@ public class GraphManager : MonoBehaviour
     public List<int> initialStates;
     public int stateCount = 0, transitionCount = 0;
     public bool isSimulating = false;
-    public int pendingStuffs = 0;
+    private int pendingStuffs = 0;
     private float transitionSpeed;
 
     private Object _lock = new Object();
@@ -35,7 +35,6 @@ public class GraphManager : MonoBehaviour
             currentMode.OnClick();
         }
     }
-
 
     public void AddNode(Node node)
 
@@ -87,7 +86,7 @@ public class GraphManager : MonoBehaviour
             return false;
         }
 
-        foreach(Node node in nodes)
+        foreach (Node node in nodes)
         {
             if(node.CompareTag("State") && node.position == 1)
             {
@@ -102,9 +101,10 @@ public class GraphManager : MonoBehaviour
                 Debug.Log(logText);
                 uiManager.AddLog(logText);
                 StartCoroutine(StartStochasticSimulation(node));
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     IEnumerator StartStochasticSimulation(Node state)
@@ -135,7 +135,7 @@ public class GraphManager : MonoBehaviour
 
         if (CheckStochasticTransitionFireCondition(selectedTransition))
         {
-            FirePetriNetTransition((Transition)selectedTransition);
+            FirePetriNetTransition((Transition)selectedTransition, waitingTime);
             List<Node> connectedStates = GetOutgoingNodes(selectedTransition);
             foreach (Node connectedState in connectedStates)
                 StartCoroutine(StartStochasticSimulation(connectedState));
@@ -178,7 +178,7 @@ public class GraphManager : MonoBehaviour
     }
 
 
-    public void FirePetriNetTransition(Transition transition)
+    public int[] FirePetriNetTransition(Transition transition, float waitTime = 0)
     {
         lock (_lock)
         {
@@ -205,33 +205,27 @@ public class GraphManager : MonoBehaviour
                 logText = $"Can't fire {transition.transform.name}, doesn't meet firing condition(*t > m)";
                 Debug.LogError(logText);
                 uiManager.AddLog(logText);
-                return;
+                return null;
             }
 
             //SetTransitionFireColor(transition);
-            transition.SetFiringColor();
+            if (waitTime == 0)
+                transition.SetFiringColor();
+            else
+                transition.SetFiringColor(waitTime);
 
             int[] m_prime = GetNewStates(m, star_t, t_star);
             string m_primeString = string.Join(", ", m_prime);
             //Debug.Log($"New state: {m_primeString}");
 
             SetNewStates(m_prime);
+            return m_prime;
         }
     }
 
     private void GetValuesForSimulation(Transition transition, ref int[] m, ref int[] star_t, ref int[] t_star)
     {
-        int count = 0;
-
-        foreach (Node node in nodes)
-        {
-            string tag = node.tag;
-            if (tag == "State")
-            {
-                State state = (State)node;
-                m[count++] = state.value;
-            }
-        }
+        m = GetCurrentStates();
 
         foreach (Edge edge in edges)
         {
@@ -246,6 +240,22 @@ public class GraphManager : MonoBehaviour
                 t_star[toNode.position - 1] = edge.weight;
             }
         }
+    }
+
+    private int[] GetCurrentStates()
+    {
+        int[] m = new int[stateCount];
+        int count = 0;
+        foreach (Node node in nodes)
+        {
+            string tag = node.tag;
+            if (tag == "State")
+            {
+                State state = (State)node;
+                m[count++] = state.value;
+            }
+        }
+        return m;
     }
 
     private bool TestStateMovingCondition(int[] star_t, int[] m)
@@ -477,6 +487,16 @@ public class GraphManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public void IncrementPendingStuffs()
+    {
+        pendingStuffs++;
+    }
+
+    public void DecrementPendingStuffs()
+    {
+        pendingStuffs--;
     }
 
 

@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c28d7b4d789b1f4fa22e0d14d40b4e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 0
+  value: 1
   titleText: {fileID: 6003180170182201857}
   valueInputField: {fileID: 6938480275389263627}
   valueText: {fileID: 5553089479149716470}

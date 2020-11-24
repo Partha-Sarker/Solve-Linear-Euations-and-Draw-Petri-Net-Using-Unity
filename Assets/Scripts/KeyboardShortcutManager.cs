@@ -152,14 +152,15 @@ public class KeyboardShortcutManager : MonoBehaviour
     {
         camController.canZoom = false;
         enableShortcut = false;
-        graphManager.pendingStuffs++;
+        graphManager.IncrementPendingStuffs();
 
         FileBrowser.SetFilters(false, new FileBrowser.Filter("Graph", ".json"));
         //FileBrowser.AddQuickLink("File Browser", "C:\\", null);
         // Show a load file dialog and wait for a response from user
         // Load file/folder: file, Allow multiple selection: true
         // Initial path: default (Documents), Title: "Load File", submit button text: "Load"
-        yield return FileBrowser.WaitForLoadDialog(false, true, "C:\\", "Load File", "Load");
+        string defaultPath = PlayerPrefs.GetString("default_path", "C:\\");
+        yield return FileBrowser.WaitForLoadDialog(false, true, defaultPath, "Load File", "Load");
 
         // Dialog is closed
         // Print whether the user has selected some files/folders or cancelled the operation (FileBrowser.Success)
@@ -172,6 +173,7 @@ public class KeyboardShortcutManager : MonoBehaviour
             try
             {
                 graphManager.LoadGraph(path);
+                PlayerPrefs.SetString("default_path", path);
             }
             catch (Exception)
             {
@@ -181,7 +183,7 @@ public class KeyboardShortcutManager : MonoBehaviour
             }
         }
 
-        graphManager.pendingStuffs--;
+        graphManager.DecrementPendingStuffs();
         enableShortcut = true;
         camController.canZoom = true;
     }
@@ -190,10 +192,11 @@ public class KeyboardShortcutManager : MonoBehaviour
     {
         camController.canZoom = false;
         enableShortcut = false;
-        graphManager.pendingStuffs++;
+        graphManager.IncrementPendingStuffs();
         FileBrowser.SetFilters(false, new FileBrowser.Filter("Graph", ".json"));
 
-        yield return FileBrowser.WaitForSaveDialog(false, true, "C:\\", "Save Graph", "Save");
+        string defaultPath = PlayerPrefs.GetString("default_path", "C:\\");
+        yield return FileBrowser.WaitForSaveDialog(false, true, defaultPath, "Save Graph", "Save");
         Debug.Log(FileBrowser.Success);
 
         if (FileBrowser.Success)
@@ -203,6 +206,7 @@ public class KeyboardShortcutManager : MonoBehaviour
             try
             {
                 graphManager.SaveGraph(path);
+                PlayerPrefs.SetString("default_path", path);
             }
             catch (Exception)
             {
@@ -211,7 +215,7 @@ public class KeyboardShortcutManager : MonoBehaviour
                 uiManager.AddLog(log);
             }
         }
-        graphManager.pendingStuffs--;
+        graphManager.DecrementPendingStuffs();
         enableShortcut = true;
         camController.canZoom = true;
     }
