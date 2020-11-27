@@ -105,8 +105,8 @@ public class GraphManager : MonoBehaviour
 
     IEnumerator StartStochasticSimulation(Node state)
     {
-        if (state.value <= 0)
-            yield break;
+        //if (state.value <= 0)
+        //    yield break;
 
         Debug.Log($"Activating {state.transform.name}:");
 
@@ -134,7 +134,8 @@ public class GraphManager : MonoBehaviour
             yield return new WaitForSeconds(waitingTime);
             List<Node> connectedStates = GetOutgoingNodes(selectedTransition);
             foreach (Node connectedState in connectedStates)
-                StartCoroutine(StartStochasticSimulation(connectedState));
+                if(connectedState.value > 0)
+                    StartCoroutine(StartStochasticSimulation(connectedState));
         }
     }
 
@@ -507,20 +508,4 @@ public class GraphManager : MonoBehaviour
     {
         pendingStuffs--;
     }
-
-
-    //private void SetTransitionFireColor(Transition targetTransition)
-    //{
-    //    foreach(Node node in nodes)
-    //    {
-    //        if (node.CompareTag("Transition"))
-    //        {
-    //            Transition transition = (Transition)node;
-    //            if (transition == targetTransition)
-    //                transition.SetFiringColor();
-    //            else
-    //                transition.ResetColor();
-    //        }
-    //    }
-    //}
 }

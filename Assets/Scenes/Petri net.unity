@@ -2500,6 +2500,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graphModes: {fileID: 158495600}
   uiManager: {fileID: 161487387}
+  camController: {fileID: 519420030}
   nodes: []
   edges: []
   initialStates: 
