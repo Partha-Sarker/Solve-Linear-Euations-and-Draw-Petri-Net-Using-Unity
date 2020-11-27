@@ -164,7 +164,6 @@ public class KeyboardShortcutManager : MonoBehaviour
 
         // Dialog is closed
         // Print whether the user has selected some files/folders or cancelled the operation (FileBrowser.Success)
-        Debug.Log(FileBrowser.Success);
 
         if (FileBrowser.Success)
         {
@@ -197,7 +196,6 @@ public class KeyboardShortcutManager : MonoBehaviour
 
         string defaultPath = PlayerPrefs.GetString("default_path", "C:\\");
         yield return FileBrowser.WaitForSaveDialog(false, true, defaultPath, "Save Graph", "Save");
-        Debug.Log(FileBrowser.Success);
 
         if (FileBrowser.Success)
         {

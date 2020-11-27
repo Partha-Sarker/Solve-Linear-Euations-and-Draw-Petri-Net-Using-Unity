@@ -72,4 +72,10 @@ public class CameraController : MonoBehaviour
         }
 
     }
+
+    public void SetCameraSize(float size)
+    {
+        currentCamSize = size;
+        cam.orthographicSize = size;
+    }
 }

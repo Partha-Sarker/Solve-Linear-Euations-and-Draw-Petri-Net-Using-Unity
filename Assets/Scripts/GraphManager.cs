@@ -7,6 +7,7 @@ public class GraphManager : MonoBehaviour
 {
     public GameObject graphModes;
     public UIManager uiManager;
+    public CameraController camController;
     public IGraphMode currentMode;
     public List<Node> nodes = new List<Node>();
     public List<Edge> edges = new List<Edge>();
@@ -46,7 +47,7 @@ public class GraphManager : MonoBehaviour
     public void RemoveNode(Node node)
     {
         List<Edge> edgeRemoveList = new List<Edge>();
-        foreach(Edge edge in edges) 
+        foreach (Edge edge in edges)
         {
             if ((edge.toNode == node || edge.fromNode == node) && !edgeRemoveList.Contains(edge))
                 edgeRemoveList.Add(edge);
@@ -88,13 +89,8 @@ public class GraphManager : MonoBehaviour
 
         foreach (Node node in nodes)
         {
-            if(node.CompareTag("State") && node.position == 1)
+            if (node.CompareTag("State") && node.value > 0)
             {
-                if (node.value <= 0)
-                {
-                    Debug.LogError("S1 has no token. Simulation can't be started.");
-                    return false;
-                }
                 isSimulating = true;
                 string logText = "Simulation Started";
                 transitionSpeed = PlayerPrefs.GetFloat("speed", 1);
@@ -113,11 +109,10 @@ public class GraphManager : MonoBehaviour
             yield break;
 
         Debug.Log($"Activating {state.transform.name}:");
-        yield return new WaitForSeconds(1f);
 
         List<Node> connectedTransitions = GetOutgoingNodes(state);
         string connectedTransitionsName = "";
-        foreach(Node connectedTransition in connectedTransitions)
+        foreach (Node connectedTransition in connectedTransitions)
         {
             connectedTransitionsName += connectedTransition.transform.name + " ";
         }
@@ -136,6 +131,7 @@ public class GraphManager : MonoBehaviour
         if (CheckStochasticTransitionFireCondition(selectedTransition))
         {
             FirePetriNetTransition((Transition)selectedTransition, waitingTime);
+            yield return new WaitForSeconds(waitingTime);
             List<Node> connectedStates = GetOutgoingNodes(selectedTransition);
             foreach (Node connectedState in connectedStates)
                 StartCoroutine(StartStochasticSimulation(connectedState));
@@ -147,7 +143,7 @@ public class GraphManager : MonoBehaviour
         int sumOfProb = GetSumOfProbability(transitions);
         int randomNumebr = Random.Range(1, sumOfProb + 1);
         int tempSum = 0;
-        foreach(Node node in transitions)
+        foreach (Node node in transitions)
         {
             if (randomNumebr >= tempSum && randomNumebr <= node.value + tempSum)
                 return node;
@@ -169,7 +165,7 @@ public class GraphManager : MonoBehaviour
     private bool CheckStochasticTransitionFireCondition(Node transition)
     {
         List<Node> states = GetIncomingNodes(transition);
-        foreach(Node state in states)
+        foreach (Node state in states)
         {
             if (state.value <= 0)
                 return false;
@@ -260,7 +256,7 @@ public class GraphManager : MonoBehaviour
 
     private bool TestStateMovingCondition(int[] star_t, int[] m)
     {
-        for(int i=0; i<stateCount; i++)
+        for (int i = 0; i < stateCount; i++)
         {
             if (star_t[i] > m[i])
                 return false;
@@ -271,7 +267,7 @@ public class GraphManager : MonoBehaviour
     private int[] GetNewStates(int[] m, int[] star_t, int[] t_star)
     {
         int[] m_prime = new int[stateCount];
-        for(int i=0; i<stateCount; i++)
+        for (int i = 0; i < stateCount; i++)
         {
             m_prime[i] = m[i] - star_t[i] + t_star[i];
         }
@@ -280,7 +276,7 @@ public class GraphManager : MonoBehaviour
 
     private void SetNewStates(int[] m_prime)
     {
-        foreach(Node node in nodes)
+        foreach (Node node in nodes)
         {
             if (node.CompareTag("State"))
             {
@@ -295,11 +291,11 @@ public class GraphManager : MonoBehaviour
     public void ResetStates()
     {
         //SetTransitionFireColor(null);
-        if(initialStates == null)
+        if (initialStates == null)
         {
             Debug.Log("Nothing to reset");
         }
-        if(stateCount == initialStates.Count)
+        if (stateCount == initialStates.Count)
         {
             SetNewStates(initialStates.ToArray());
             Debug.Log("States has been reset");
@@ -313,7 +309,7 @@ public class GraphManager : MonoBehaviour
     public void Refresh()
     {
         stateCount = 0; transitionCount = 0;
-        foreach(Node node in nodes)
+        foreach (Node node in nodes)
         {
             GameObject nodeGameObject = node.gameObject;
             string tag = nodeGameObject.tag;
@@ -334,7 +330,7 @@ public class GraphManager : MonoBehaviour
             nodeGameObject.name = title;
             node.SetTitleText(title);
         }
-        for(int i = 0; i < edges.Count; i++)
+        for (int i = 0; i < edges.Count; i++)
         {
             int count = i + 1;
             string title = "Edge" + count;
@@ -355,7 +351,7 @@ public class GraphManager : MonoBehaviour
             Destroy(node.gameObject);
         }
         nodes.Clear();
-        foreach(Edge edge in edges)
+        foreach (Edge edge in edges)
         {
             Destroy(edge.gameObject);
         }
@@ -368,7 +364,7 @@ public class GraphManager : MonoBehaviour
 
     public Edge GetEdge(Node toNode, Node fromNode)
     {
-        foreach(Edge edge in edges)
+        foreach (Edge edge in edges)
         {
             if (edge.toNode == toNode && edge.fromNode == fromNode)
                 return edge;
@@ -381,9 +377,9 @@ public class GraphManager : MonoBehaviour
     private List<Node> GetOutgoingNodes(Node node)
     {
         List<Node> nodes = new List<Node>();
-        foreach(Edge edge in edges)
+        foreach (Edge edge in edges)
         {
-            if(edge.fromNode == node)
+            if (edge.fromNode == node)
             {
                 nodes.Add(edge.toNode);
             }
@@ -408,7 +404,7 @@ public class GraphManager : MonoBehaviour
 
     public void SaveGraph(string path)
     {
-        if(nodes.Count == 0)
+        if (nodes.Count == 0)
         {
             string log = "Nothing to save";
             uiManager.AddLog(log);
@@ -417,6 +413,8 @@ public class GraphManager : MonoBehaviour
         }
         Refresh();
         PetriNet petriNet = new PetriNet(nodes, edges);
+        petriNet.SetCamParam(Camera.main);
+        Debug.Log(petriNet.camPos + " " + petriNet.camSize);
         string jsonString = JsonUtility.ToJson(petriNet);
         Debug.Log(jsonString);
         File.WriteAllText(path, jsonString);
@@ -435,7 +433,7 @@ public class GraphManager : MonoBehaviour
         }
         catch (System.Exception) { }
 
-        if(jsonString == "")
+        if (jsonString == "")
         {
             string log = $"{path} is empty";
             uiManager.AddLog(log);
@@ -447,6 +445,12 @@ public class GraphManager : MonoBehaviour
             Simulate();
 
         ClearAll();
+        //if (!jsonString.Contains("camSize"))
+        //{
+        //    int len = jsonString.Length;
+        //    jsonString.Insert(len - 2, ",\"camPos\":{\"x\":0.0,\"y\":0.0,\"z\":-10.0},\"camSize\":10.0");
+        //    print(jsonString);
+        //}
         PetriNet petriNet = JsonUtility.FromJson<PetriNet>(jsonString);
 
         AddStateMode addStateMode = FindObjectOfType<AddStateMode>();
@@ -462,7 +466,7 @@ public class GraphManager : MonoBehaviour
             else
                 addTransitionMode.AddTransition(pos).value = value;
         }
-        foreach(EdgeInfo edgeInfo in petriNet.edgeInfos)
+        foreach (EdgeInfo edgeInfo in petriNet.edgeInfos)
         {
             Node toNode = FindNode(edgeInfo.toNodeTag, edgeInfo.toNodePosition);
             Node fromNode = FindNode(edgeInfo.fromNodeTag, edgeInfo.fromNodePosition);
@@ -472,12 +476,17 @@ public class GraphManager : MonoBehaviour
         uiManager.AddLog(logText);
         Debug.Log(logText);
         Refresh();
+
+        Debug.Log(petriNet.camPos + " " + petriNet.camSize);
+        Camera cam = Camera.main;
+        cam.transform.position = petriNet.camPos;
+        camController.SetCameraSize(petriNet.camSize);
     }
 
     private Node FindNode(string tag, int position)
     {
         int count = 0;
-        foreach(Node node in nodes)
+        foreach (Node node in nodes)
         {
             if (node.CompareTag(tag))
             {

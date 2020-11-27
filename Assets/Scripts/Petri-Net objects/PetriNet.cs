@@ -7,6 +7,8 @@ public class PetriNet
 {
     public NodeInfo[] nodeInfos;
     public EdgeInfo[] edgeInfos;
+    public Vector3 camPos;
+    public float camSize;
 
     public PetriNet(List<Node>nodes, List<Edge> edges)
     {
@@ -24,5 +26,12 @@ public class PetriNet
             EdgeInfo edgeInfo = new EdgeInfo(edges[i]);
             edgeInfos[i] = edgeInfo;
         }
+    }
+
+    public void SetCamParam(Camera cam)
+    {
+        camPos = cam.transform.position;
+        camSize = cam.orthographicSize;
+        //Debug.Log(camPos + " " + camSize);
     }
 }
