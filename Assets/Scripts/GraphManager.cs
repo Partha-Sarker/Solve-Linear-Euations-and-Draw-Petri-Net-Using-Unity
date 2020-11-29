@@ -9,10 +9,10 @@ public class GraphManager : MonoBehaviour
     public UIManager uiManager;
     public CameraController camController;
     public IGraphMode currentMode;
-    public List<Node> nodes = new List<Node>();
-    public List<Edge> edges = new List<Edge>();
+    private List<Node> nodes = new List<Node>();
+    private List<Edge> edges = new List<Edge>();
     public List<int> initialStates;
-    public int stateCount = 0, transitionCount = 0;
+    private int stateCount = 0, transitionCount = 0;
     public bool isSimulating = false;
     private int pendingStuffs = 0;
     private float transitionSpeed;
@@ -358,9 +358,9 @@ public class GraphManager : MonoBehaviour
         }
         edges.Clear();
         Refresh();
-        string logText = "Petri net cleared";
-        Debug.Log(logText);
-        uiManager.AddLog(logText);
+        //string logText = "Petri net cleared";
+        //Debug.Log(logText);
+        //uiManager.AddLog(logText);
     }
 
     public Edge GetEdge(Node toNode, Node fromNode)

@@ -6,23 +6,23 @@ public class Transition : Node
 {
     public SpriteRenderer spriteRenderer;
     public TransitionColor transitionColor;
-    public float resetDelay = 1;
+    public float fireDuration = 1;
     public int resetReq = 0;
 
     private void Start()
     {
         spriteRenderer.color = transitionColor.defaultColor;
     }
-    public void SetFiringColor(float delay)
+    public void SetFiringColor(float duration)
     {
         resetReq++;
         spriteRenderer.color = transitionColor.activeColor;
-        Invoke(nameof(ResetColor), delay);
+        Invoke(nameof(ResetColor), duration);
     }
 
     public void SetFiringColor()
     {
-        SetFiringColor(resetDelay);
+        SetFiringColor(fireDuration);
     }
 
     private void ResetColor()

@@ -2501,11 +2501,7 @@ MonoBehaviour:
   graphModes: {fileID: 158495600}
   uiManager: {fileID: 161487387}
   camController: {fileID: 519420030}
-  nodes: []
-  edges: []
   initialStates: 
-  stateCount: 0
-  transitionCount: 0
   isSimulating: 0
 --- !u!4 &1643280254
 Transform:
@@ -3648,7 +3644,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Keyboard Shortcuts
+  m_text: '<b>User Manual</b>
 
     - Press s and click to create state.
 

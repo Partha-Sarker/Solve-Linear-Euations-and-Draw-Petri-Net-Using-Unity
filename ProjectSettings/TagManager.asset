@@ -8,6 +8,8 @@ TagManager:
   - State
   - Transition
   - Edge
+  - Variable
+  - Constant
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,5 @@
 # Petri-net Stochastic
-## Keyboard Shortcuts
+## User Manual
 - Press s and click to create state.
 - Press t and click to create transition.
 - Press e and click 2 nodes to create an edge between them.

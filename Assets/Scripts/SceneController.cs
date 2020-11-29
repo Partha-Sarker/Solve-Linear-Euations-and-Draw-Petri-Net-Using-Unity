@@ -9,6 +9,11 @@ public class SceneController : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    public void LoadLinEq()
+    {
+        SceneManager.LoadScene(2);
+    }
+
     public void ExitApplication()
     {
         Application.Quit();
