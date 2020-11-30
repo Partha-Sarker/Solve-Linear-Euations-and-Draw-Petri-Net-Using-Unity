@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class LinearEquation : MonoBehaviour
 {
@@ -11,18 +12,36 @@ public class LinearEquation : MonoBehaviour
     private int variableCount, equationCount;
     public int defaultCoefficientValue = 0, defaultConstantValue = 0;
     public int defaultEquationCount = 3, defaultVariableCount = 3;
+    public int floatRound = 4;
     List<List<GameObject>> equations;
     List<GameObject> eqStuffs;
     TMP_InputField[] allInputs;
     private bool shiftDown = false;
+    //private float[,] defaultMat;
 
     private void Start()
     {
         variableCount = defaultVariableCount;
         equationCount = defaultEquationCount;
         allInputs = FindObjectsOfType<TMP_InputField>();
-        System.Array.Reverse(allInputs);
+        Array.Reverse(allInputs);
         CreateAllEq();
+        //defaultMat = new float[6, 6] {
+        //    { 1, 1, 1, 1, 1, 1 },
+        //    { 2, -2, 3, 0, 0, 0 },
+        //    { 0, 1, -4, 0, 0, 0 },
+        //    { 0, 1, 0, -1, 3, 0 },
+        //    { 0, 0, 1, 1, -5, 0 },
+        //    { -2, 0, 0, 0, 2, 0 }
+        //};
+        //defaultMat = new float[6, 6] {
+        //    { 1, 1, 1, 1, 1, 1 },
+        //    { 2, -2, 3, 0, 0, 0 },
+        //    { 0, 1, -4, 0, 0, 0 },
+        //    { 0, 1, 0, -1, 3, 0 },
+        //    { 0, 0, 1, 1, -5, 0 },
+        //    { -2, 0, 0, 0, 2, 0 }
+        //};
     }
 
     private void Update()
@@ -84,14 +103,14 @@ public class LinearEquation : MonoBehaviour
         else
             equationCount = int.Parse(equationInputValue);
         if (variableCount < 1)
-            variableCount = 3;
-        if (variableCount > equationCount)
-            variableCount = equationCount;
+            variableCount = defaultVariableCount;
+        if (equationCount < 1)
+            equationCount = defaultEquationCount;
 
         RemoveAllEq();
         CreateAllEq();
         allInputs = FindObjectsOfType<TMP_InputField>();
-        System.Array.Reverse(allInputs);
+        Array.Reverse(allInputs);
     }
 
     public void RemoveAllEq()
@@ -142,26 +161,253 @@ public class LinearEquation : MonoBehaviour
     private void GaussianMethod()
     {
         float[,] augmentedMatrix = GetAugmentedMatrix();
-        //TestGaussian(augmentedMatrix);
-        //PrintMatrix(augmentedMatrix);
-        List<float> variables = SolveUsingGaussianElimination(augmentedMatrix);
-        if (variables != null)
+        try
         {
-            string result = "";
+            float[,] forwardElimMat = ForwardElimination(augmentedMatrix);
+            float[,] upperTriagnleMat = GetUpperTriangleMat(forwardElimMat);
+            float[] result = GetUnknownsFromUpperTriangleMat(upperTriagnleMat);
+            string resultString = "";
             for (int i = 0; i < variableCount; i++)
             {
-                result += $"X<sub>{i + 1}</sub> = {variables[i]};";
+                resultString += $"X<sub>{i + 1}</sub> = {result[i]};";
                 if (i != variableCount - 1)
-                    result += "   ";
+                    resultString += "   ";
             }
-            resultText.text = result;
+            resultText.text = resultString;
+            //PrintMatrix(result);
         }
-        else
+        catch (Exception)
         {
             resultText.text = "Doesn't have a unique solution or any solution at all.";
         }
+
+
     }
 
+    private float[,] ForwardElimination(float[,] augmentedMatrix)
+    {
+        int rowCount = augmentedMatrix.GetLength(0), columnCount = augmentedMatrix.GetLength(1);
+        if (rowCount < columnCount - 1)
+            throw new Exception();
+
+        if (columnCount == 1)
+        {
+            for (int i = 0; i < rowCount; i++)
+            {
+                float value = (float)Math.Round((decimal)augmentedMatrix[i, 0], floatRound);
+                if (value != 0.0f)
+                    throw new Exception();
+            }
+            return augmentedMatrix;
+        }
+
+        int maxIndex = GetAbsMaxIndex(augmentedMatrix);
+        SwapRow(ref augmentedMatrix, 0, maxIndex);
+        float pivot = (float)Math.Round((decimal)augmentedMatrix[0, 0], floatRound);
+        print($"pivot: {pivot}");
+        if (pivot == 0.0f)
+            throw new Exception();
+
+        MultiplyRowByValue(ref augmentedMatrix, 0, augmentedMatrix[0, 0], false);
+
+        for (int i = 1; i < rowCount; i++)
+        {
+            float[,] row0 = GetRow(augmentedMatrix, 0);
+            float[,] targetRow = GetRow(augmentedMatrix, i);
+            MultiplyRowByValue(ref row0, 0, targetRow[0, 0]);
+            AddRowToMat(ref targetRow, row0, 0, false);
+            SetRow(ref augmentedMatrix, i, targetRow);
+        }
+        float[,] subMat = GetSubMatrix(augmentedMatrix, 1, 1);
+        float[,] forwardSubMat = ForwardElimination(subMat);
+        SetSubMatrix(ref augmentedMatrix, forwardSubMat);
+        //PrintMatrix(augmentedMatrix);
+        return augmentedMatrix;
+    }
+
+    private float[] GetUnknownsFromUpperTriangleMat(float[,] upperTriangleMat)
+    {
+        int rowCount = upperTriangleMat.GetLength(0);
+        float[] unknowns = new float[rowCount];
+        for (int i = rowCount - 1; i >= 0; i--)
+        {
+            unknowns[i] = upperTriangleMat[i, rowCount] / upperTriangleMat[i, i];
+            for (int j = i - 1; j >= 0; j--)
+            {
+                upperTriangleMat[j, rowCount] -= upperTriangleMat[j, i] * unknowns[i];
+            }
+        }
+        for (int i = 0; i < rowCount; i++)
+            unknowns[i] = (float)Math.Round((decimal)unknowns[i], floatRound);
+        return unknowns;
+    }
+
+    private float[,] GetAugmentedMatrix()
+    {
+        float[,] augmented = new float[equationCount, variableCount + 1];
+        int eqCount = 0;
+        foreach (List<GameObject> equation in equations)
+        {
+            int valueCount = 0;
+            foreach (GameObject eqStuff in equation)
+            {
+                if (eqStuff.CompareTag("Variable") || eqStuff.CompareTag("Constant"))
+                {
+                    TMP_InputField input = eqStuff.GetComponentInChildren<TMP_InputField>();
+                    string valueString = input.text;
+                    if (valueString == "")
+                        valueString = input.placeholder.GetComponent<TextMeshProUGUI>().text;
+
+                    float value = float.Parse(valueString);
+                    augmented[eqCount, valueCount++] = value;
+                }
+            }
+            eqCount++;
+        }
+        return augmented;
+    }
+
+    private int GetAbsMaxIndex(float[,] mat)
+    {
+        int index = 0, rowCount = mat.GetLength(0);
+        float currentMax = float.MinValue;
+
+        for (int i = 0; i < rowCount; i++)
+        {
+            float value = Mathf.Abs(mat[i, 0]);
+            if (value > currentMax)
+            {
+                currentMax = value;
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    private float[,] GetSubMatrix(float[,] mat, int startRowIndex, int startColIndex)
+    {
+        int rowCount = mat.GetLength(0), colCount = mat.GetLength(1);
+        int newRowCount = rowCount - startRowIndex;
+        int newColCount = colCount - startColIndex;
+        float[,] subMat = new float[newRowCount, newColCount];
+        for (int i = 0; i < newRowCount; i++)
+        {
+            for (int j = 0; j < newColCount; j++)
+            {
+                subMat[i, j] = mat[i + startRowIndex, j + startColIndex];
+            }
+        }
+
+        return subMat;
+    }
+
+    private float[,] GetUpperTriangleMat(float[,] mat)
+    {
+        int colCount = mat.GetLength(1);
+        float[,] subMat = new float[colCount - 1, colCount];
+        for (int i = 0; i < colCount - 1; i++)
+        {
+            for (int j = 0; j < colCount; j++)
+            {
+                subMat[i, j] = mat[i, j];
+            }
+        }
+        return subMat;
+    }
+
+    private void SetSubMatrix(ref float[,] mat, float[,] subMat)
+    {
+        int subMatRow = subMat.GetLength(0), subMatCol = subMat.GetLength(1);
+        int rowOffset = mat.GetLength(0) - subMatRow, colOffset = mat.GetLength(1) - subMatCol;
+        for (int i = 0; i < subMatRow; i++)
+        {
+            for (int j = 0; j < subMatCol; j++)
+            {
+                mat[i + rowOffset, j + colOffset] = subMat[i, j];
+            }
+        }
+    }
+
+    private void SwapRow(ref float[,] mat, int index1, int index2)
+    {
+        int columnCount = mat.GetLength(1);
+        for (int i = 0; i < columnCount; i++)
+        {
+            float temp = mat[index1, i];
+            mat[index1, i] = mat[index2, i];
+            mat[index2, i] = temp;
+        }
+    }
+
+    private void MultiplyRowByValue(ref float[,] mat, int index, float multiple, bool multiply = true)
+    {
+        int columnCount = mat.GetLength(1);
+        for (int i = 0; i < columnCount; i++)
+        {
+            if (multiply)
+                mat[index, i] *= multiple;
+            else
+                mat[index, i] /= multiple;
+        }
+    }
+
+    private void AddValueToRow(ref float[,] mat, int index, float value, bool add = true)
+    {
+        int columnCount = mat.GetLength(1);
+        for (int i = 0; i < columnCount; i++)
+        {
+            if (add)
+                mat[index, i] += value;
+            else
+                mat[index, i] -= value;
+        }
+    }
+
+    private void AddRowToRow(ref float[,] mat, int index1, int index2, bool add = true)
+    {
+        int columnCount = mat.GetLength(1);
+        for (int i = 0; i < columnCount; i++)
+        {
+            if (add)
+                mat[index1, i] += mat[index2, i];
+            else
+                mat[index1, i] -= mat[index2, i];
+        }
+    }
+
+    private void AddRowToMat(ref float[,] mat, float[,] row, int index, bool add = true)
+    {
+        int columnCount = mat.GetLength(1);
+        for (int i = 0; i < columnCount; i++)
+        {
+            if (add)
+                mat[index, i] += row[0, i];
+            else
+                mat[index, i] -= row[0, i];
+        }
+    }
+
+    private float[,] GetRow(float[,] mat, int index)
+    {
+        int columnCount = mat.GetLength(1);
+        float[,] rowMat = new float[1, columnCount];
+        for (int i = 0; i < columnCount; i++)
+        {
+            rowMat[0, i] = mat[index, i];
+        }
+        return rowMat;
+    }
+
+    private void SetRow(ref float[,] mat, int index, float[,] row)
+    {
+        int columnCount = mat.GetLength(1);
+        for (int i = 0; i < columnCount; i++)
+        {
+            mat[index, i] = row[0, i];
+        }
+    }
+
+    #region gaussian algo google
     public List<float> SolveUsingGaussianElimination(float[,] M)
     {
         // input checks
@@ -197,7 +443,7 @@ public class LinearEquation : MonoBehaviour
                         tmp[i] = M[swapRow, i]; M[swapRow, i] = M[col, i]; M[col, i] = tmp[i];
                     }
                 }
-                else 
+                else
                     return null; // no, then the matrix has no unique solution
             }
         }
@@ -233,23 +479,20 @@ public class LinearEquation : MonoBehaviour
         PrintMatrix(M, "after insertion");
 
         List<float> variables = new List<float>();
-        int  numOfColumn = M.GetLength(1);
+        int numOfColumn = M.GetLength(1);
         for (int i = 0; i < variableCount; i++)
         {
             variables.Add(M[i, numOfColumn - 1]);
         }
         return variables;
     }
-
-    public void TestGaussian(float[,] m)
-    {
-
-    }
+    #endregion
 
 
+    #region matrix method for solving linear equation
     private void SolveUsingMatrixMethod()
     {
-        if(variableCount != equationCount)
+        if (variableCount != equationCount)
         {
             resultText.text = "Can't solve. Number of unknowns must be equal to number of equations";
         }
@@ -269,31 +512,6 @@ public class LinearEquation : MonoBehaviour
                 result += "   ";
         }
         resultText.text = result;
-    }
-
-    private float[,] GetAugmentedMatrix()
-    {
-        float[,] augmented = new float[equationCount, variableCount + 1];
-        int eqCount = 0;
-        foreach (List<GameObject> equation in equations)
-        {
-            int valueCount = 0;
-            foreach (GameObject eqStuff in equation)
-            {
-                if (eqStuff.CompareTag("Variable") || eqStuff.CompareTag("Constant"))
-                {
-                    TMP_InputField input = eqStuff.GetComponentInChildren<TMP_InputField>();
-                    string valueString = input.text;
-                    if (valueString == "")
-                        valueString = input.placeholder.GetComponent<TextMeshProUGUI>().text;
-
-                    float value = float.Parse(valueString);
-                    augmented[eqCount, valueCount++] = value;
-                }
-            }
-            eqCount++;
-        }
-        return augmented;
     }
 
     private void GetCoefficientAndConstantMatrix(ref float[,] coefficient, ref float[,] constant)
@@ -457,16 +675,51 @@ public class LinearEquation : MonoBehaviour
         return mulMatrix;
     }
 
+    #endregion
+
     private void PrintMatrix(float[,] a, string title = "test")
     {
-        print($"{title} start-----------");
+        string value = $"{title} start-----------\n";
         for (int i = 0; i < a.GetLength(0); i++)
         {
-            string rowValue = "";
             for (int j = 0; j < a.GetLength(1); j++)
-                rowValue += a[i, j] + " ";
-            print(rowValue);
+            {
+                value += string.Format("{0:0.00}   ", a[i, j]);
+            }
+            value += "\n";
         }
-        print($"{title} end-------------");
+        print(value);
+        //print($"{title} end-------------");
     }
+
+    private void PrintMatrix(float[] a, string title = "test")
+    {
+        string value = $"{title} start-----------\n";
+        for (int i = 0; i < a.GetLength(0); i++)
+        {
+            value += string.Format("{0:0.00}   ", a[i]);
+        }
+        print(value);
+        //print($"{title} end-------------");
+    }
+
+    //TestGaussian(augmentedMatrix);
+    //PrintMatrix(augmentedMatrix);
+    //List<float> variables = SolveUsingGaussianElimination(augmentedMatrix);
+    //if (variables != null)
+    //{
+    //    string result = "";
+    //    for (int i = 0; i < variableCount; i++)
+    //    {
+    //        result += $"X<sub>{i + 1}</sub> = {variables[i]};";
+    //        if (i != variableCount - 1)
+    //            result += "   ";
+    //    }
+    //    resultText.text = result;
+    //}
+    //else
+    //{
+    //    resultText.text = "Doesn't have a unique solution or any solution at all.";
+    //}
+
 }
