@@ -3,7 +3,9 @@
 - Press s and click to create state.
 - Press t and click to create transition.
 - Press e and click 2 nodes to create an edge between them.
-- Press shift+e and click 2 nodes to create edge in both side between them.
+- Hold shift and click while in edge mode to create straight edge.
+- Hold ctrl and click to move the last edge point to current mouse position.
+- Press e again to delete unfinished edge.
 - Press ctrl+d and click any node or edge to delete them.
 - Press ctrl+e and click to edit weight or token value.
 - Press ctrl+f and click to fire transition.

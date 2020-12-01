@@ -1322,6 +1322,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 935221420}
   m_CullTransparentMesh: 0
+--- !u!1 &1101523623 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3634987423048624958, guid: 73ec086c597255548816a0e1fb2a12fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 3634987423381789943}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1101523625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101523623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &1292255426
 GameObject:
   m_ObjectHideFlags: 0
@@ -2728,6 +2748,31 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3634987421976406626, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987421976406626, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -60
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987421976406626, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987421976406626, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -60
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987421976406626, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3634987422146356576, guid: 73ec086c597255548816a0e1fb2a12fe,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -2802,43 +2847,49 @@ PrefabInstance:
         - Press e and click 2 nodes
         to create an edge between them.
 
-        - Press shift+e and click 2 nodes
-        to create edges in both side between them.
+        - Hold shift and click while in
+        edge mode to create straight edge.
 
-        - Press ctrl+d and click
-        any node or edge to delete them.
+        - Hold ctrl and click to move
+        the last edge point to current mouse position.
 
-        - Press ctrl+e and click to edit
-        weight or token value.
+        - Press e again to
+        delete unfinished edge.
+
+        - Press ctrl+d and click any node or edge
+        to delete them.
+
+        - Press ctrl+e and click to edit weight or token
+        value.
 
         - Press ctrl+f and click to fire transition.
 
-        -
-        Press ctrl+r to reset states.
+        - Press
+        ctrl+r to reset states.
 
-        - Press ctrl+shift+space to simulate
-        stochastic.
-
-        - Press ctrl+shift+r to clear everything.
+        - Press ctrl+shift+space to simulate stochastic.
 
         -
-        Press ctrl+shift+x to exit the application.
+        Press ctrl+shift+r to clear everything.
 
-        - Press ctrl+s to save
-        petri-net.
+        - Press ctrl+shift+x to
+        exit the application.
 
-        - Press ctrl+l to load petri-net.
-
-        - Use arrows
-        to move camera left-right, up-down.
-
-        - Scroll mouse wheel to adjust
-        camera zoom.
-
-        - Hold right-mouse-button to drag the camera.
+        - Press ctrl+s to save petri-net.
 
         -
-        Hold right-mouse-button and scroll mouse wheel to adjust camera drag speed.'
+        Press ctrl+l to load petri-net.
+
+        - Use arrows to move camera left-right,
+        up-down.
+
+        - Scroll mouse wheel to adjust camera zoom.
+
+        -
+        Hold right-mouse-button to drag the camera.
+
+        - Hold right-mouse-button
+        and scroll mouse wheel to adjust camera drag speed.'
       objectReference: {fileID: 0}
     - target: {fileID: 3634987423048624956, guid: 73ec086c597255548816a0e1fb2a12fe,
         type: 3}
@@ -2869,6 +2920,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontSizeBase
       value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987423048624957, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987423048624957, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987423048624957, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.000061035156
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987423048624957, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987423048624957, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1242.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987423048624957, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 844.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987423048624957, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634987423048624957, guid: 73ec086c597255548816a0e1fb2a12fe,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73ec086c597255548816a0e1fb2a12fe, type: 3}

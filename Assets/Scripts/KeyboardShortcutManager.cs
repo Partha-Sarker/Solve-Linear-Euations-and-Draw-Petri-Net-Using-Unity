@@ -20,14 +20,6 @@ public class KeyboardShortcutManager : MonoBehaviour
         if (!enableShortcut)
             return;
 
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //    sceneController.GoToMainMenu();
-
-        //if (Input.GetKeyDown(KeyCode.LeftAlt))
-        //    altDown = true;
-        //else if (Input.GetKeyUp(KeyCode.LeftAlt))
-        //    altDown = false;
-
         if (Input.GetKeyDown(KeyCode.LeftControl))
             ctrlDown = true;
         else if (Input.GetKeyUp(KeyCode.LeftControl))
@@ -52,18 +44,18 @@ public class KeyboardShortcutManager : MonoBehaviour
             Debug.Log(logText);
             uiManager.AddLog(logText);
             AddEdgeMode addEdgeMode = graphModes.GetComponent<AddEdgeMode>();
-            addEdgeMode.prevNode = null;
+            addEdgeMode.ResetEverything();
             graphManager.currentMode = addEdgeMode;
         }
-        else if (Input.GetKeyDown(KeyCode.E) && !ctrlDown && shiftDown)
-        {
-            string logText = "Add double edge mode activated";
-            Debug.Log(logText);
-            uiManager.AddLog(logText);
-            AddDoubleEdgeMode addDoubleEdgeMode = graphModes.GetComponent<AddDoubleEdgeMode>();
-            addDoubleEdgeMode.prevNode = null;
-            graphManager.currentMode = addDoubleEdgeMode;
-        }
+        //else if (Input.GetKeyDown(KeyCode.E) && !ctrlDown && shiftDown)
+        //{
+        //    string logText = "Add double edge mode activated";
+        //    Debug.Log(logText);
+        //    uiManager.AddLog(logText);
+        //    AddDoubleEdgeMode addDoubleEdgeMode = graphModes.GetComponent<AddDoubleEdgeMode>();
+        //    addDoubleEdgeMode.prevNode = null;
+        //    graphManager.currentMode = addDoubleEdgeMode;
+        //}
         else if (Input.GetKeyDown(KeyCode.E) && ctrlDown && !shiftDown)
         {
             string logText = "Edit mode activated";

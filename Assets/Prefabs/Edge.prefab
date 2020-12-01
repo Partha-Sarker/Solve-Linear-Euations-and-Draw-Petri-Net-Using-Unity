@@ -176,7 +176,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3981356740364010482
 RectTransform:
   m_ObjectHideFlags: 0
@@ -196,7 +196,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 365.141, y: 182.5705}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7738752884094073328
 Canvas:
@@ -268,7 +268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2550745180368445639}
   - component: {fileID: 5946024041961161621}
-  - component: {fileID: 8199376708369902481}
+  - component: {fileID: 4825373643460358502}
   - component: {fileID: -6100526670422805233}
   m_Layer: 0
   m_Name: Edge
@@ -332,9 +332,7 @@ LineRenderer:
   m_SortingLayerID: 166951959
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Positions:
-  - {x: -10, y: 0, z: 0}
-  - {x: 10, y: 0, z: 1}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -390,7 +388,7 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!61 &8199376708369902481
+--- !u!61 &4825373643460358502
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -406,15 +404,15 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5, y: 5}
+    newSize: {x: 5, y: 5}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 21, y: 1}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &-6100526670422805233
 MonoBehaviour:
@@ -428,16 +426,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9ef4675662ac4e46adf78612d1ca517, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triangle: {fileID: 4607525193213612098}
+  input: {fileID: 2663527426623787179}
   fromNode: {fileID: 0}
   toNode: {fileID: 0}
+  linePoints: []
   weight: 1
   offset: 0.4
   line: {fileID: 5946024041961161621}
-  col: {fileID: 8199376708369902481}
+  col: {fileID: 0}
   inputField: {fileID: 7468956952296024969}
   weightText: {fileID: 4010917062567669568}
   inputCanvas: {fileID: 3981356740364010482}
-  graphManager: {fileID: 0}
 --- !u!1 &4607525193213612098
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,7 +454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4497303200606308831
 Transform:
   m_ObjectHideFlags: 0

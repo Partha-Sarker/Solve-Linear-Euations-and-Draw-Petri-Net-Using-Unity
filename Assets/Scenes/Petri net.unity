@@ -184,7 +184,6 @@ GameObject:
   - component: {fileID: 158495601}
   - component: {fileID: 158495606}
   - component: {fileID: 158495605}
-  - component: {fileID: 158495609}
   - component: {fileID: 158495607}
   - component: {fileID: 158495608}
   - component: {fileID: 158495604}
@@ -308,23 +307,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graphManager: {fileID: 1643280253}
---- !u!114 &158495609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 158495600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e49e4eed4e32c145ac32fbe45004833, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  graphManager: {fileID: 1643280253}
-  edgeGameObject: {fileID: 4303653036277783067, guid: cc901540ffeeffd4dae1e3b3bed939f2,
-    type: 3}
-  uiManager: {fileID: 161487387}
-  prevNode: {fileID: 0}
 --- !u!1 &161487386
 GameObject:
   m_ObjectHideFlags: 0
@@ -3620,12 +3602,45 @@ RectTransform:
   m_Father: {fileID: 3634987423528627519}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00079345703}
-  m_SizeDelta: {x: -20, y: -24.314056}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3634987422453230689
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1242.1, y: 803.79}
+  m_Pivot: {x: 0, y: 1}
+--- !u!1 &3634987422453230691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3634987422453230688}
+  - component: {fileID: 3634987422453230694}
+  - component: {fileID: 3634987422453230693}
+  - component: {fileID: 3634987422453230692}
+  m_Layer: 5
+  m_Name: Content
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &3634987422453230692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3634987422453230691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
+--- !u!114 &3634987422453230693
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3651,18 +3666,29 @@ MonoBehaviour:
     - Press
     t and click to create transition.
 
-    - Press e and click 2 states to create
+    - Press e and click 2 nodes to create
     an edge between them.
 
-    - Press ctrl+d and click any node or edge to delete
-    them.
+    - Hold shift and click while in edge mode to create
+    straight edge.
 
-    - Press ctrl+e and click to edit weight or token value.
+    - Hold ctrl and click to move the last edge point to current
+    mouse position.
+
+    - Press e again to delete unfinished edge.
 
     - Press
-    ctrl+f and click to fire transition.
+    ctrl+d and click any node or edge to delete them.
 
-    - Press ctrl+r to reset states.
+    - Press ctrl+e and click
+    to edit weight or token value.
+
+    - Press ctrl+f and click to fire transition.
+
+    -
+    Press ctrl+r to reset states.
+
+    - Press ctrl+shift+space to simulate stochastic.
 
     -
     Press ctrl+shift+r to clear everything.
@@ -3670,16 +3696,21 @@ MonoBehaviour:
     - Press ctrl+shift+x to exit the
     application.
 
+    - Press ctrl+s to save petri-net.
+
+    - Press ctrl+l to load
+    petri-net.
+
     - Use arrows to move camera left-right, up-down.
 
     - Scroll
     mouse wheel to adjust camera zoom.
 
-    - Hold right-mouse-button and move mouse
-    to drag the camera.
+    - Hold right-mouse-button to drag the
+    camera.
 
-    - Hold right-mouse-button and scroll mouse wheel to
-    adjust camera drag speed.'
+    - Hold right-mouse-button and scroll mouse wheel to adjust camera
+    drag speed.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3747,13 +3778,13 @@ MonoBehaviour:
   m_pageToDisplay: 1
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
-    textComponent: {fileID: 3634987422453230689}
-    characterCount: 669
+    textComponent: {fileID: 3634987422453230693}
+    characterCount: 950
     spriteCount: 0
-    spaceCount: 118
-    wordCount: 127
+    spaceCount: 169
+    wordCount: 182
     linkCount: 0
-    lineCount: 14
+    lineCount: 20
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -3771,24 +3802,6 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &3634987422453230691
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3634987422453230688}
-  - component: {fileID: 3634987422453230694}
-  - component: {fileID: 3634987422453230689}
-  m_Layer: 5
-  m_Name: Content
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!222 &3634987422453230694
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3990,5 +4003,5 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -9.863403, y: 0}
+  m_SizeDelta: {x: -60, y: -60}
   m_Pivot: {x: 0.5, y: 0.5}

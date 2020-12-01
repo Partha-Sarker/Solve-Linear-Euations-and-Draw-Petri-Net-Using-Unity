@@ -471,7 +471,7 @@ public class GraphManager : MonoBehaviour
         {
             Node toNode = FindNode(edgeInfo.toNodeTag, edgeInfo.toNodePosition);
             Node fromNode = FindNode(edgeInfo.fromNodeTag, edgeInfo.fromNodePosition);
-            addEdgeMode.CreateEdge(fromNode, toNode).weight = edgeInfo.weight;
+            addEdgeMode.CreateEdge(fromNode, toNode, edgeInfo.points).weight = edgeInfo.weight;
         }
         string logText = $"Petri-net loaded from {path}";
         uiManager.AddLog(logText);
