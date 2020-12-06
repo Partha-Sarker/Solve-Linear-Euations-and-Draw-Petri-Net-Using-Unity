@@ -49,6 +49,15 @@ public class UIManager : MonoBehaviour
         textMesh.autoSizeTextContainer = true;
     }
 
+    public void ClearLog()
+    {
+        int childCount = logParent.childCount;
+        for (int i = 0; i < childCount; i++)
+        {
+            Destroy(logParent.GetChild(i).gameObject);
+        }
+    }
+
     public void OnBottomPanelMouseEnter()
     {
         graphManager.IncrementPendingStuffs();        

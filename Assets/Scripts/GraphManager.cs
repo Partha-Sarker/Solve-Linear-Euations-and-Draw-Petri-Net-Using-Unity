@@ -347,6 +347,7 @@ public class GraphManager : MonoBehaviour
 
     public void ClearAll()
     {
+        uiManager.ClearLog();
         foreach (Node node in nodes)
         {
             Destroy(node.gameObject);
