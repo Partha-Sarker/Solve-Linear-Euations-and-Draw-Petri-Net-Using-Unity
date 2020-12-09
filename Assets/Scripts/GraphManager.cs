@@ -130,8 +130,10 @@ public class GraphManager : MonoBehaviour
 
         if (CheckStochasticTransitionFireCondition(selectedTransition))
         {
-            FirePetriNetTransition((Transition)selectedTransition, waitingTime);
+            Transition transition = (Transition)selectedTransition;
+            transition.SetFiringColor(waitingTime);
             yield return new WaitForSeconds(waitingTime);
+            FirePetriNetTransition(transition);
             List<Node> connectedStates = GetOutgoingNodes(selectedTransition);
             foreach (Node connectedState in connectedStates)
                 if(connectedState.value > 0)
@@ -206,10 +208,10 @@ public class GraphManager : MonoBehaviour
             }
 
             //SetTransitionFireColor(transition);
-            if (waitTime == 0)
-                transition.SetFiringColor();
-            else
-                transition.SetFiringColor(waitTime);
+            //if (waitTime == 0)
+            //    transition.SetFiringColor();
+            //else
+            //    transition.SetFiringColor(waitTime);
 
             int[] m_prime = GetNewStates(m, star_t, t_star);
             string m_primeString = string.Join(", ", m_prime);
