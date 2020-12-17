@@ -3222,6 +3222,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6f613c49e3dc6842b4e394320ee523e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waitingTimeBetweenOneStates: 0.2
+  currentTransitionCount: 0
+  maxTransitionCount: 10
   graphModes: {fileID: 158495600}
   uiManager: {fileID: 161487387}
   camController: {fileID: 519420030}
@@ -3558,7 +3561,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 5
+  m_ScrollSensitivity: 20
   m_Viewport: {fileID: 1479160847}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}

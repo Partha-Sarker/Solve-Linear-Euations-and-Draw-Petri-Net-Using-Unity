@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 public class GraphManager : MonoBehaviour
 {
     [SerializeField] float waitingTimeBetweenOneStates = .1f;
-    private int currentTransitionCount, maxTransitionCount = 10;
+    [SerializeField] private int currentTransitionCount, maxTransitionCount = 10;
     public GameObject graphModes;
     public UIManager uiManager;
     public CameraController camController;
@@ -138,7 +139,8 @@ public class GraphManager : MonoBehaviour
         {
             Transition transition = (Transition)selectedTransition;
             transition.SetFiringColor(waitingTime);
-            currentTransitionCount++;
+            Interlocked.Increment(ref currentTransitionCount);
+            //currentTransitionCount++;
             yield return new WaitForSeconds(waitingTime);
             FirePetriNetTransition(transition);
             if(currentTransitionCount >= maxTransitionCount && maxTransitionCount != 0)
