@@ -5,6 +5,8 @@ using System.IO;
 
 public class GraphManager : MonoBehaviour
 {
+    [SerializeField] float waitingTimeBetweenOneStates = .1f;
+    private int currentTransitionCount, maxTransitionCount = 10;
     public GameObject graphModes;
     public UIManager uiManager;
     public CameraController camController;
@@ -94,6 +96,8 @@ public class GraphManager : MonoBehaviour
                 isSimulating = true;
                 string logText = "Simulation Started";
                 transitionSpeed = PlayerPrefs.GetFloat("speed", 1);
+                maxTransitionCount = PlayerPrefs.GetInt("transitionCount", transitionCount);
+                currentTransitionCount = 0;
                 Debug.Log(logText);
                 uiManager.AddLog(logText);
                 StartCoroutine(StartStochasticSimulation(node));
@@ -107,6 +111,8 @@ public class GraphManager : MonoBehaviour
     {
         //if (state.value <= 0)
         //    yield break;
+        if (currentTransitionCount >= maxTransitionCount && maxTransitionCount != 0)
+            yield break;
 
         Debug.Log($"Activating {state.transform.name}:");
 
@@ -132,8 +138,19 @@ public class GraphManager : MonoBehaviour
         {
             Transition transition = (Transition)selectedTransition;
             transition.SetFiringColor(waitingTime);
+            currentTransitionCount++;
             yield return new WaitForSeconds(waitingTime);
             FirePetriNetTransition(transition);
+            if(currentTransitionCount >= maxTransitionCount && maxTransitionCount != 0)
+            {
+                string logString = "Simulation is stopped";
+                uiManager.AddLog(logString);
+                isSimulating = false;
+                uiManager.SetPlayUI();
+                StopAllCoroutines();
+                yield break;
+            }
+            yield return new WaitForSeconds(waitingTimeBetweenOneStates);
             List<Node> connectedStates = GetOutgoingNodes(selectedTransition);
             foreach (Node connectedState in connectedStates)
                 if(connectedState.value > 0)

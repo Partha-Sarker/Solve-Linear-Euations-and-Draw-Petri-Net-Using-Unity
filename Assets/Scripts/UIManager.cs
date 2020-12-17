@@ -6,13 +6,14 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private int defaultTransitionCount = 10;
     public Color logEnableColor, logDisableColor;
     public CanvasGroup logCanvasGroup;
     public Image logImage;
     public GraphManager graphManager;
     public KeyboardShortcutManager shortcutManager;
     public CameraController camController;
-    public TMP_InputField speedInput;
+    public TMP_InputField speedInput, transitionCountInput;
     public Sprite play, pause, stop;
     public Button playButton;
     public RectTransform logParent;
@@ -22,7 +23,9 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         float speed = PlayerPrefs.GetFloat("speed", 1);
+        int transitionCount = PlayerPrefs.GetInt("transitionCount", defaultTransitionCount);
         speedInput.text = speed.ToString();
+        transitionCountInput.text = transitionCount.ToString();
     }
 
     public void SetPlayUI()
@@ -85,9 +88,9 @@ public class UIManager : MonoBehaviour
             graphManager.DecrementPendingStuffs();
     }
 
-    public void OnSpeedInputSelect()
+    public void OnBottomInputSelect()
     {
-        Debug.Log("Speed input select");
+        Debug.Log("Bottom input select");
         graphManager.IncrementPendingStuffs();
         shortcutManager.enableShortcut = false;
     }
@@ -111,6 +114,31 @@ public class UIManager : MonoBehaviour
         shortcutManager.enableShortcut = true;
 
         string logText = $"Current transition unit is {speed} sec";
+        AddLog(logText);
+        Debug.Log(logText);
+    }
+
+    public void OnTransitionInputEndEdit()
+    {
+        Debug.Log("Transition count input end edit");
+
+        string transitionCountString = transitionCountInput.text;
+        if (transitionCountString == null || transitionCountString == "" || transitionCountString == "-")
+        {
+            transitionCountString = defaultTransitionCount.ToString();
+        }
+        if (transitionCountString == "-0")
+            transitionCountString = "0";
+        int transitionCount = int.Parse(transitionCountString);
+        if (transitionCount < 0) transitionCount *= -1;
+        PlayerPrefs.SetInt("transitionCount", transitionCount);
+        PlayerPrefs.Save();
+        transitionCountInput.text = transitionCount.ToString();
+
+        graphManager.DecrementPendingStuffs();
+        shortcutManager.enableShortcut = true;
+
+        string logText = $"Current transition count is {transitionCount}";
         AddLog(logText);
         Debug.Log(logText);
     }
