@@ -139,9 +139,9 @@ public class GraphManager : MonoBehaviour
         {
             Transition transition = (Transition)selectedTransition;
             transition.SetFiringColor(waitingTime);
-            Interlocked.Increment(ref currentTransitionCount);
             //currentTransitionCount++;
             yield return new WaitForSeconds(waitingTime);
+            Interlocked.Increment(ref currentTransitionCount);
             FirePetriNetTransition(transition);
             if(currentTransitionCount >= maxTransitionCount && maxTransitionCount != 0)
             {
@@ -152,11 +152,13 @@ public class GraphManager : MonoBehaviour
                 StopAllCoroutines();
                 yield break;
             }
-            yield return new WaitForSeconds(waitingTimeBetweenOneStates);
             List<Node> connectedStates = GetOutgoingNodes(selectedTransition);
             foreach (Node connectedState in connectedStates)
                 if(connectedState.value > 0)
+                {
+                    yield return new WaitForSeconds(waitingTimeBetweenOneStates);
                     StartCoroutine(StartStochasticSimulation(connectedState));
+                }
         }
     }
 
