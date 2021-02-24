@@ -73,7 +73,7 @@ public class UIManager : MonoBehaviour
 
     public void OnLogPanelMouseEnter() 
     {
-        if (camController.isDragging)
+        if (camController.isDragging || !log.activeSelf)
             return;
 
         camController.canZoom = false;
@@ -83,6 +83,9 @@ public class UIManager : MonoBehaviour
 
     public void OnLogPanelMouseExit() 
     {
+        if (!log.activeSelf)
+            return;
+
         camController.canZoom = true;
         if (log.activeSelf)
             graphManager.DecrementPendingStuffs();
@@ -161,13 +164,15 @@ public class UIManager : MonoBehaviour
     {
         if (log.activeSelf)
         {
-            logCanvasGroup.alpha = .5f;
+            logCanvasGroup.alpha = 0f;
             logImage.color = logDisableColor;
+            log.SetActive(false);
         }
         else
         {
-            logCanvasGroup.alpha = 1;
+            logCanvasGroup.alpha = .5f;
             logImage.color = logEnableColor;
+            log.SetActive(true);
         }
     }
 

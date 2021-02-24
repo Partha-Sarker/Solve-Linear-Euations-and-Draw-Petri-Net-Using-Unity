@@ -47,15 +47,6 @@ public class KeyboardShortcutManager : MonoBehaviour
             addEdgeMode.ResetEverything();
             graphManager.currentMode = addEdgeMode;
         }
-        //else if (Input.GetKeyDown(KeyCode.E) && !ctrlDown && shiftDown)
-        //{
-        //    string logText = "Add double edge mode activated";
-        //    Debug.Log(logText);
-        //    uiManager.AddLog(logText);
-        //    AddDoubleEdgeMode addDoubleEdgeMode = graphModes.GetComponent<AddDoubleEdgeMode>();
-        //    addDoubleEdgeMode.prevNode = null;
-        //    graphManager.currentMode = addDoubleEdgeMode;
-        //}
         else if (Input.GetKeyDown(KeyCode.E) && ctrlDown && !shiftDown)
         {
             string logText = "Edit mode activated";
@@ -63,21 +54,21 @@ public class KeyboardShortcutManager : MonoBehaviour
             uiManager.AddLog(logText);
             graphManager.currentMode = graphModes.GetComponent<InputMode>();
         }
-        else if (Input.GetKeyDown(KeyCode.F) && ctrlDown && !shiftDown)
-        {
-            string logText = "Firing mode activate";
-            Debug.Log(logText);
-            uiManager.AddLog(logText);
-            graphManager.currentMode = graphModes.GetComponent<FiringMode>();
-        }
+        //else if (Input.GetKeyDown(KeyCode.F) && ctrlDown && !shiftDown)
+        //{
+        //    string logText = "Firing mode activate";
+        //    Debug.Log(logText);
+        //    uiManager.AddLog(logText);
+        //    graphManager.currentMode = graphModes.GetComponent<FiringMode>();
+        //}
         else if (Input.GetKeyDown(KeyCode.L) && ctrlDown)
         {
             StartCoroutine(ShowLoadDialogCoroutine());
         }
-        else if (Input.GetKeyDown(KeyCode.R) && ctrlDown && !shiftDown)
-        {
-            ResetGraphStates();
-        }
+        //else if (Input.GetKeyDown(KeyCode.R) && ctrlDown && !shiftDown)
+        //{
+        //    ResetGraphStates();
+        //}
         else if (Input.GetKeyDown(KeyCode.R) && ctrlDown && shiftDown)
         {
             graphManager.ClearAll();
@@ -104,23 +95,9 @@ public class KeyboardShortcutManager : MonoBehaviour
             uiManager.AddLog(logText);
             Application.Quit();
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && ctrlDown && shiftDown)
-        {
-            SimulateGraph();
-        }
-        //else
+        //else if (Input.GetKeyDown(KeyCode.Space) && ctrlDown && shiftDown)
         //{
-        //    for(int i=0; i<10; i++)
-        //    {
-        //        if (Input.GetKeyDown("" + i) && altDown && shiftDown)
-        //        {
-        //            graphManager.SaveGraph(i);
-        //        }
-        //        else if(Input.GetKeyDown("" + i) && altDown && !shiftDown)
-        //        {
-        //            graphManager.LoadGraph(i);
-        //        }
-        //    }
+        //    SimulateGraph();
         //}
 
 
@@ -254,5 +231,7 @@ public class KeyboardShortcutManager : MonoBehaviour
             moveInput.x = -1;
         else
             moveInput.x = 0;
+
+        moveInput *= -1;
     }
 }
