@@ -59,7 +59,7 @@ Result
 ![](photos/result.png)
 <br/>
 
-Draing graph(petri net)  
+Drawing graph(petri net)  
 
 ![](photos/graph.png)
 <br/>
