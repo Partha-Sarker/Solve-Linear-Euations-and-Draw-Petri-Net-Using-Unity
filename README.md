@@ -1,7 +1,7 @@
 # Linear Equation solver - Draw Petri Net
 ## Introduction
-This project has to separate module inside it. One module can solve linear equations and the other draws and simulates Petri Net. 
-You can solve linear eqautions having any number of variables. If the equations hold a unique solution, linear equation can calculate the answer. The linear equation solving part uses the Gaussian Elimination method for solving the equations. Additionally, you can also draw petri net having states, transitions and create edge between them.  
+This project has two separate modules inside it. One module can solve linear equations and the other draws and simulates Petri Net. 
+You can solve linear equations having any number of variables. If the equations hold a unique solution, linear equation solver can calculate the answer. The linear equation solving part uses the Gaussian Elimination method for solving the equations. Additionally, you can also draw petri net having states, transitions and create edges between them.  
 **Executable Project Link**: [https://drive.google.com/file/d/1phRdLnc3fMZq8VAxE6GQ0ZufigSTKWxy/view?usp=sharing](https://drive.google.com/file/d/1phRdLnc3fMZq8VAxE6GQ0ZufigSTKWxy/view?usp=sharing)
 
 ## Features and Limitations
@@ -10,10 +10,10 @@ You can solve linear eqautions having any number of variables. If the equations 
 - Uses gaussian elimination
 - Give results if the equations result in a unique solution
 ### Petri Net
-- Can create any number of sates or transition
-- Can onnect the nodes with directed edge
-- No two same of noded can't be connected
-- Has eyboard shortcuts
+- Can create any number of states or transition
+- connect the nodes with directed edge
+- No two same of nodes can't be connected
+- Has keyboard shortcuts
 - Log screen for understanding what is going on
 - Saving the current graph(petri net) on local machine
 - Loading graph(petri net) from local machine
@@ -24,7 +24,7 @@ You can solve linear eqautions having any number of variables. If the equations 
 - Press s and click to create state.
 - Press t and click to create transition.
 - Press e and click 2 nodes to create an edge between them.
-- Hold shift and click while in edge mode to create straight edge.
+- Hold shift and click while in edge mode to create a straight edge.
 - Hold ctrl and click to move the last edge point to current mouse position.
 - Press e again to delete unfinished edge.
 - Press ctrl+d and click any node or edge to delete them.
